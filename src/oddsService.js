@@ -1,10 +1,10 @@
 // Odds Service — The Odds API integration
-// Fetches upcoming fixtures and converts bookmaker odds to fair probabilities
+// NOTE: API calls currently disabled to preserve quota during testing
+// Re-enable by removing the early return in fetchUpcomingFixtures
 
 const BASE_URL = 'https://api.the-odds-api.com/v4'
 const API_KEY = import.meta.env.VITE_ODDS_API_KEY
 
-// Map BYN competition keys to The Odds API sport keys
 const SPORT_KEY_MAP = {
   epl:     'soccer_epl',
   laliga:  'soccer_spain_la_liga',
@@ -13,11 +13,15 @@ const SPORT_KEY_MAP = {
   atp:     'tennis_atp_wimbledon',
   wta:     'tennis_wta_wimbledon',
   pga:     'golf_the_open_championship_winner',
-  // F1 not available on The Odds API — uses demo fixtures
 }
 
-// Which competitions use outright (tournament winner) markets vs h2h
 const OUTRIGHT_COMPS = new Set(['pga'])
+
+export async function fetchUpcomingFixtures(competitionKey, daysAhead = 14) {
+  // ── API DISABLED during testing to preserve quota ──
+  // Remove this return to re-enable live odds
+  return []
+}
 
 // ── De-vig: convert raw decimal odds to fair probabilities ────────────────────
 function devig(decimalOdds) {
