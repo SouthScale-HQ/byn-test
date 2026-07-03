@@ -441,20 +441,24 @@ export default function PlatformMock() {
     // Persist to Supabase in background
     try {
       const { data: { session } } = await supabase.auth.getSession();
-      if (!session) return;
+      if (!session) { console.log('BET DEBUG: no session'); return; }
 
       const cd = compData[activeCompKey];
       let roundId = dbRoundState[activeCompKey]?.roundId;
       let dbOutcomeMap = dbRoundState[activeCompKey]?.dbOutcomeMap || {};
 
+      console.log('BET DEBUG: roundId from state=', roundId, 'activeCompKey=', activeCompKey);
+
       // Lazily initialise round and markets in DB on first bet
       if (!roundId) {
+        console.log('BET DEBUG: initialising round markets, round=', cd.round, 'markets count=', cd.markets.length);
         const result = await initRoundMarketsInDB(
           activeCompKey,
           cd.round,
           1,
           cd.markets
         );
+        console.log('BET DEBUG: initRoundMarketsInDB result=', JSON.stringify(result));
         roundId = result.roundId;
         dbOutcomeMap = result.dbOutcomeMap;
         setDbRoundState((prev) => ({
@@ -467,8 +471,11 @@ export default function PlatformMock() {
       const outcomeKey = `local_${selMarket}_${selOutcome}`;
       const outcomeDbId = dbOutcomeMap[outcomeKey];
 
+      console.log('BET DEBUG: outcomeKey=', outcomeKey, 'outcomeDbId=', outcomeDbId, 'roundId=', roundId);
+      console.log('BET DEBUG: full dbOutcomeMap=', JSON.stringify(dbOutcomeMap));
+
       if (outcomeDbId && roundId) {
-        await saveBetToDB(session.user.id, {
+        const saved = await saveBetToDB(session.user.id, {
           roundId,
           competitionKey: activeCompKey,
           outcomeDbId,
@@ -476,6 +483,9 @@ export default function PlatformMock() {
           shares: delta,
           priceAtExecution: priceBefore,
         });
+        console.log('BET DEBUG: saveBetToDB result=', JSON.stringify(saved));
+      } else {
+        console.log('BET DEBUG: skipped save - outcomeDbId or roundId missing');
       }
     } catch (err) {
       console.error('Error saving bet to DB:', err);
