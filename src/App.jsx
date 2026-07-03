@@ -552,22 +552,6 @@ export default function PlatformMock() {
     );
   }
 
-  if (authLoading) {
-    return (
-      <div style={{ ...shell, display: "flex", alignItems: "center", justifyContent: "center" }}>
-        <style>{fontImports}</style>
-        <div style={{ textAlign: "center" }}>
-          <svg viewBox="0 0 80 80" width="48" height="48" style={{ marginBottom: 12 }}>
-            <rect x="0" y="0" width="80" height="80" rx="18" fill="#2FA86C"/>
-            <polygon points="40,14 63,27 63,53 40,66 17,53 17,27" fill="none" stroke="#0A1F1A" strokeWidth="2.5"/>
-            <circle cx="40" cy="40" r="10" fill="none" stroke="#0A1F1A" strokeWidth="2.5"/>
-          </svg>
-          <div className="sg" style={{ color: "#7FBFA0", fontSize: 13 }}>Loading BYN...</div>
-        </div>
-      </div>
-    );
-  }
-
   if (screen === "login") {
     if (showLoginHowTo) {
       return (
@@ -869,7 +853,6 @@ export default function PlatformMock() {
                 userCountry={userCountry}
                 comp={comp}
                 favouriteTeamByComp={favouriteTeamByComp}
-                setFavouriteTeamByComp={setFavouriteTeamByComp}
                 allTeams={allTeamsFor(comp)}
                 editWindowOpen={cd.round === 1}
               />
@@ -877,6 +860,31 @@ export default function PlatformMock() {
 
             {tab === "markets" && (
               <>
+                {/* Favourite team prompt — shown at season start for team sports */}
+                {cd.round === 1 && allTeamsFor(comp).length > 0 && (
+                  <div style={{ ...card, marginBottom: 12, border: "1px solid #2FA86C" }}>
+                    <div className="sg" style={{ fontWeight: 700, fontSize: 13, marginBottom: 4, color: "#2FA86C" }}>
+                      New season — pick your favourite {comp.name} team
+                    </div>
+                    <div style={{ fontSize: 11, color: "#9DBFAF", marginBottom: 10 }}>
+                      This sets your team leaderboard in Rankings. Locked after this round.
+                    </div>
+                    <select
+                      value={favouriteTeamByComp[comp.key] || ""}
+                      onChange={(e) => setFavouriteTeamByComp((prev) => ({ ...prev, [comp.key]: e.target.value }))}
+                      style={{ width: "100%", padding: "9px 10px", borderRadius: 8, border: "1px solid #2FA86C", background: "#16352A", color: "#F4F7F2", fontSize: 13 }}
+                    >
+                      <option value="">Select a team...</option>
+                      {allTeamsFor(comp).map((t) => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                    {favouriteTeamByComp[comp.key] && (
+                      <div style={{ fontSize: 11, color: "#2FA86C", marginTop: 6 }}>
+                        ✓ {favouriteTeamByComp[comp.key]} selected — locked in after this round
+                      </div>
+                    )}
+                  </div>
+                )}
+
                 {cd.stage === "betting" && (
                   <>
                     <div style={{ display: "flex", gap: 8, padding: 10, borderRadius: 8, background: "#16352A", marginBottom: 12, fontSize: 11, color: "#7FBFA0" }}>
@@ -1176,7 +1184,7 @@ function LeaguesScreen({ userName, groups, newGroupName, setNewGroupName, create
   );
 }
 
-function RankingsScreen({ seasonByUser, userName, userCountry, comp, favouriteTeamByComp, setFavouriteTeamByComp, allTeams, editWindowOpen }) {
+function RankingsScreen({ seasonByUser, userName, userCountry, comp, favouriteTeamByComp, allTeams, editWindowOpen }) {
   const [filter, setFilter] = useState("global");
   const myFavouriteTeam = favouriteTeamByComp[comp.key];
   const hasTeams = allTeams.length > 0;
@@ -1201,30 +1209,16 @@ function RankingsScreen({ seasonByUser, userName, userCountry, comp, favouriteTe
           <div style={{ fontSize: 10, color: "#5E8775" }}>Set at sign-up</div>
         </div>
 
-        {/* Favourite team — selector only at start of season, text display otherwise */}
+        {/* Favourite team — selected in Games tab at season start, display only here */}
         {hasTeams && (
-          <div>
+          <div style={{ marginTop: 10 }}>
             <div style={{ fontSize: 10, color: "#7FBFA0", textTransform: "uppercase", letterSpacing: 0.5, marginBottom: 6 }}>Favourite {comp.name} team</div>
-            {editWindowOpen ? (
-              <>
-                <div style={{ fontSize: 11, color: "#2FA86C", marginBottom: 6 }}>New season — pick your team for this season's rankings.</div>
-                <select
-                  value={myFavouriteTeam || ""}
-                  onChange={(e) => setFavouriteTeamByComp((prev) => ({ ...prev, [comp.key]: e.target.value }))}
-                  style={{ width: "100%", padding: "9px 10px", borderRadius: 8, border: "1px solid #2FA86C", background: "#16352A", color: "#F4F7F2", fontSize: 13 }}
-                >
-                  <option value="">Not set</option>
-                  {allTeams.map((t) => <option key={t} value={t}>{t}</option>)}
-                </select>
-              </>
-            ) : (
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 12px", borderRadius: 8, background: "#16352A" }}>
-                <div style={{ fontSize: 14, fontWeight: 600, color: "#F4F7F2" }}>
-                  {myFavouriteTeam || <span style={{ color: "#5E8775" }}>Not set</span>}
-                </div>
-                <div style={{ fontSize: 10, color: "#5E8775" }}>Locked this season</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 12px", borderRadius: 8, background: "#16352A" }}>
+              <div style={{ fontSize: 14, fontWeight: 600, color: "#F4F7F2" }}>
+                {myFavouriteTeam || <span style={{ color: "#5E8775" }}>Not set — pick one in the Games tab at season start</span>}
               </div>
-            )}
+              {myFavouriteTeam && <div style={{ fontSize: 10, color: "#5E8775" }}>Locked this season</div>}
+            </div>
           </div>
         )}
       </div>
