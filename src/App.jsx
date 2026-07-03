@@ -279,10 +279,8 @@ export default function PlatformMock() {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "Player");
-        // Ensure profile exists FIRST before loading wallets (wallets FK references profiles)
         const profile = await ensureProfile(session.user);
         if (profile) {
-          // Only load wallet state once profile is confirmed in DB
           const persisted = await loadUserState(session.user.id, COMPETITIONS);
           if (persisted && Object.keys(persisted).length > 0) {
             setCompData((prev) => {
@@ -295,16 +293,18 @@ export default function PlatformMock() {
               return updated;
             });
           }
+          setScreen("app"); // existing session → go straight to app
+        } else {
+          setScreen("app"); // profile issue but still let them in
         }
-        setScreen("app");
       }
       setAuthLoading(false);
     });
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "Player");
-        ensureProfile(session.user);
-        setScreen("app");
+        await ensureProfile(session.user);
+        setScreen("app"); // OAuth callback → go straight to app
       } else {
         setScreen("login");
       }
@@ -328,10 +328,10 @@ export default function PlatformMock() {
   const [nameError, setNameError] = useState("");
   const [nameTaken, setNameTaken] = useState(false);
   const [nameChecking, setNameChecking] = useState(false);
+  const [nameEdited, setNameEdited] = useState(false); // only check after user types
 
-  // Debounced uniqueness check — runs 600ms after user stops typing
   useEffect(() => {
-    if (!userName.trim() || nameError) { setNameTaken(false); return; }
+    if (!nameEdited || !userName.trim() || nameError) { setNameTaken(false); return; }
     setNameChecking(true);
     const timer = setTimeout(async () => {
       const taken = await isDisplayNameTaken(userName.trim());
@@ -339,7 +339,7 @@ export default function PlatformMock() {
       setNameChecking(false);
     }, 600);
     return () => clearTimeout(timer);
-  }, [userName, nameError]);
+  }, [userName, nameError, nameEdited]);
   const [userCountry, setUserCountry] = useState(COUNTRIES[0]);
   const [ageConfirmed, setAgeConfirmed] = useState(false);
   const [userReferralCode] = useState(() => Math.random().toString(36).slice(2, 8).toUpperCase());
@@ -745,7 +745,7 @@ export default function PlatformMock() {
           <input
             placeholder="Pick a display name"
             value={userName}
-            onChange={(e) => { setUserName(e.target.value); setNameError(containsProfanity(e.target.value) ? "That name isn't allowed. Try something else." : ""); setNameTaken(false); }}
+            onChange={(e) => { setUserName(e.target.value); setNameEdited(true); setNameError(containsProfanity(e.target.value) ? "That name isn't allowed. Try something else." : ""); setNameTaken(false); }}
             style={{ width: "100%", padding: "10px 12px", borderRadius: 8, border: `1px solid ${nameError || nameTaken ? "#C75146" : userName.trim() && !nameChecking && !nameTaken ? "#2FA86C" : "#1c5f3f"}`, background: "#0F2920", color: "#F4F7F2", marginBottom: 6, fontSize: 14 }}
           />
           {nameError && <div style={{ fontSize: 11, color: "#E0998F", marginBottom: 8, textAlign: "left" }}>{nameError}</div>}
