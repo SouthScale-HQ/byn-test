@@ -143,7 +143,23 @@ Google OAuth already verifies email ownership before the token reaches BYN. A se
 
 ---
 
-## Naming
+## Pre-launch checklist
+
+The following items must be completed before BYN goes live to the public:
+
+- **Remove bot simulation code** from `App.jsx` — `BOTS`, `botProfiles`, `botBalances`, `botBetsThisRound`, `botForfeitThisRound` and all related logic are mock-only. In production the leaderboard uses real `round_standings` from Supabase, not simulated bot data. Bots exist solely to populate the leaderboard during solo testing.
+- **Apple Sign In** — required before App Store submission (App Store Guideline 4.8)
+- **Transfer Google Cloud project** to a BYN business account rather than personal Gmail
+- **Transfer GitHub repo** to a BYN organisation account
+- **Set up business email** at bynapp.online (Google Workspace recommended)
+- **Re-enable live odds API** — remove the early `return []` in `oddsService.js`
+- **Upgrade Odds API plan** from free tier (500 requests/month) to a paid plan for production volume
+- **Wire up Stripe** for league slot purchases and company-sponsored leagues
+- **Wire up Resend** for transactional email (lockout reminders, settlement notifications)
+- **Remove demo simulator buttons** — "Simulate results & settle round", "Advance to lockout (demo)" etc. are for testing only; real settlement will be triggered by scheduled jobs once sports data feed is live
+- **Server-side ad verification** — the ad boost currently credits nuts client-side; production must verify ad completion via ad network callback before crediting
+- **Set SEASON_LENGTH_DEMO** to the real season length per competition (EPL = 38, NFL = 17 etc.) rather than the current 4-round demo value
+
 
 **BYN — Bet Your Nuts**
 "Bet Your Nuts" is poker slang for going all-in with the best possible hand. The full name is kept subtle in the UI (small secondary text on the login screen) while BYN leads as the primary brand. The hex nut serves as the logo mark — geometric, clean, works at any size from favicon to billboard.
