@@ -57,7 +57,7 @@ export async function loadCurrentRound(competitionKey) {
     .from('competitions')
     .select('id')
     .eq('key', competitionKey)
-    .single()
+    .maybeSingle()
 
   if (!comp) return null
 
@@ -68,7 +68,7 @@ export async function loadCurrentRound(competitionKey) {
     .in('status', ['open', 'locked'])
     .order('created_at', { ascending: false })
     .limit(1)
-    .single()
+    .maybeSingle()
 
   if (error) return null
   return data

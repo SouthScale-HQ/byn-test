@@ -39,13 +39,14 @@ export async function isDisplayNameTaken(name) {
 export async function ensureProfile(user, displayName = null) {
   if (!user) return null
 
+  // Use maybeSingle() to avoid 406 error when profile doesn't exist yet
   const { data: existing, error: fetchError } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
-    .single()
+    .maybeSingle()
 
-  if (fetchError && fetchError.code !== 'PGRST116') {
+  if (fetchError) {
     console.error('Error fetching profile:', fetchError)
     return null
   }
@@ -72,6 +73,15 @@ export async function ensureProfile(user, displayName = null) {
     .single()
 
   if (insertError) {
+    // If duplicate (race condition on double login), just fetch the existing one
+    if (insertError.code === '23505') {
+      const { data: retry } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', user.id)
+        .maybeSingle()
+      return retry
+    }
     console.error('Error creating profile:', insertError)
     return null
   }

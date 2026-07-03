@@ -279,19 +279,22 @@ export default function PlatformMock() {
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
         setUserName(session.user.user_metadata?.full_name || session.user.email?.split("@")[0] || "Player");
-        await ensureProfile(session.user);
-        // Load persisted wallet balances from Supabase
-        const persisted = await loadUserState(session.user.id, COMPETITIONS);
-        if (persisted && Object.keys(persisted).length > 0) {
-          setCompData((prev) => {
-            const updated = { ...prev };
-            Object.entries(persisted).forEach(([key, state]) => {
-              if (updated[key]) {
-                updated[key] = { ...updated[key], balance: state.balance };
-              }
+        // Ensure profile exists FIRST before loading wallets (wallets FK references profiles)
+        const profile = await ensureProfile(session.user);
+        if (profile) {
+          // Only load wallet state once profile is confirmed in DB
+          const persisted = await loadUserState(session.user.id, COMPETITIONS);
+          if (persisted && Object.keys(persisted).length > 0) {
+            setCompData((prev) => {
+              const updated = { ...prev };
+              Object.entries(persisted).forEach(([key, state]) => {
+                if (updated[key]) {
+                  updated[key] = { ...updated[key], balance: state.balance };
+                }
+              });
+              return updated;
             });
-            return updated;
-          });
+          }
         }
         setScreen("app");
       }

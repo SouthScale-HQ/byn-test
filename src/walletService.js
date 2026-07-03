@@ -4,41 +4,29 @@ const WEEKLY_TOPUP = 1000
 
 // Get or create a wallet for a user in a specific competition
 export async function getOrCreateWallet(userId, competitionKey) {
-  // First get the competition ID from the key
   const { data: comp, error: compError } = await supabase
     .from('competitions')
     .select('id')
     .eq('key', competitionKey)
-    .single()
+    .maybeSingle()
 
   if (compError || !comp) {
     console.error('Competition not found:', competitionKey)
     return null
   }
 
-  // Check for existing wallet
-  const { data: existing, error: fetchError } = await supabase
+  const { data: existing } = await supabase
     .from('wallets')
     .select('*')
     .eq('user_id', userId)
     .eq('competition_id', comp.id)
-    .single()
-
-  if (fetchError && fetchError.code !== 'PGRST116') {
-    console.error('Error fetching wallet:', fetchError)
-    return null
-  }
+    .maybeSingle()
 
   if (existing) return existing
 
-  // Create new wallet with 0 balance (topup applied separately at round start)
   const { data: newWallet, error: insertError } = await supabase
     .from('wallets')
-    .insert({
-      user_id: userId,
-      competition_id: comp.id,
-      balance: 0,
-    })
+    .insert({ user_id: userId, competition_id: comp.id, balance: 0 })
     .select()
     .single()
 
