@@ -6,7 +6,7 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 
 ## 🔴 In progress / immediate
 
-- [ ] Set up Resend for transactional email (`support@bynapp.online`, `noreply@bynapp.online`)
+- [x] Set up Resend for transactional email (`noreply@bynapp.online` sending, welcome and round settled emails live)
 - [ ] Fix southscale.co.uk legal page routing (404 on `/legal/byn-privacy` and `/legal/byn-terms`)
 
 ---
@@ -81,7 +81,7 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 
 ## ⚙️ Infrastructure & accounts
 
-- [ ] **Set up Resend** — `support@bynapp.online` and `noreply@bynapp.online`
+- [x] **Set up Resend** — `noreply@bynapp.online` sending, welcome email and round settled email wired up
 - [ ] **Set up Google Workspace** or confirm M365 suffices for all business email needs
 - [ ] **Incorporate SouthScale** — Companies House registration (£50, 24-48 hours)
 - [ ] **Update legal documents** — add registered address and company number once incorporated
@@ -126,3 +126,4 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 - [x] Google Cloud transferred to andrew@southscale.co.uk
 - [x] SouthScale company website live at southscale.co.uk
 - [x] Privacy Policy and Terms of Service drafted and hosted
+- [x] Transactional email via Resend — welcome email and round settled email sending from noreply@bynapp.online
