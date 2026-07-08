@@ -514,16 +514,72 @@ export default function PlatformMock() {
     });
   }
 
-  // Load live fixtures for the active competition
+  // Save fetched fixtures to Supabase cache
+  async function cacheFixtures(compKey, roundNum, fixtures) {
+    const { data: comp } = await supabase
+      .from('competitions').select('id').eq('key', compKey).maybeSingle();
+    if (!comp) return;
+    await supabase.from('round_fixtures').upsert({
+      competition_id: comp.id,
+      round_number: roundNum,
+      season_number: 1,
+      fixtures: JSON.stringify(fixtures),
+      fetched_at: new Date().toISOString(),
+    }, { onConflict: 'competition_id,round_number,season_number' });
+  }
+
+  // Load fixtures from Supabase cache
+  async function loadCachedFixtures(compKey, roundNum) {
+    const { data: comp } = await supabase
+      .from('competitions').select('id').eq('key', compKey).maybeSingle();
+    if (!comp) return null;
+    const { data } = await supabase
+      .from('round_fixtures')
+      .select('fixtures, fetched_at')
+      .eq('competition_id', comp.id)
+      .eq('round_number', roundNum)
+      .eq('season_number', 1)
+      .maybeSingle();
+    if (!data) return null;
+    // Cache is valid for 24 hours
+    const age = Date.now() - new Date(data.fetched_at).getTime();
+    if (age > 24 * 60 * 60 * 1000) return null;
+    try {
+      return JSON.parse(data.fixtures);
+    } catch {
+      return null;
+    }
+  }
+
+  // Load live fixtures — checks cache first, only calls API if needed
   async function loadLiveFixtures(compKey) {
     const c = COMPETITIONS.find((x) => x.key === compKey);
     if (!c) return;
+
+    const cd = compData[compKey];
+
+    // Already seeded this round — skip entirely
+    if (cd?.liveSeeded) return;
+
     setFixturesLoading(true);
     try {
+      const roundNum = cd?.round || 1;
+
+      // 1. Check Supabase cache first
+      const cached = await loadCachedFixtures(compKey, roundNum);
+      if (cached?.length) {
+        setLiveFixtures((prev) => ({ ...prev, [compKey]: cached }));
+        seedMarketsFromLive(compKey, cached);
+        return;
+      }
+
+      // 2. Cache miss — call the API
       const fixtures = await fetchUpcomingFixtures(compKey, 14);
       if (fixtures.length > 0) {
         setLiveFixtures((prev) => ({ ...prev, [compKey]: fixtures }));
-        seedMarketsFromLive(compKey, fixtures); // seed LMSR state from API odds
+        seedMarketsFromLive(compKey, fixtures);
+        // 3. Save to cache so subsequent loads don't cost API credits
+        await cacheFixtures(compKey, roundNum, fixtures);
       }
     } catch (err) {
       console.error('Error loading live fixtures:', err);
@@ -887,8 +943,9 @@ export default function PlatformMock() {
     setAdBoostTotal(0);
     setSelMarket(0);
     setSelOutcome(0);
-    // Clear DB round state so it reinitialises on next bet
+    // Clear DB round state and fixture cache so new round gets fresh data
     setDbRoundState((prev) => { const n = { ...prev }; delete n[activeCompKey]; return n; });
+    setLiveFixtures((prev) => { const n = { ...prev }; delete n[activeCompKey]; return n; });
 
     // If season is resetting, zero out the wallet and archive standings in Supabase
     if (newSeasonStarting) {
