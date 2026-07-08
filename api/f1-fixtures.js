@@ -21,8 +21,17 @@ export default async function handler(req, res) {
     // Fetch all races for the season
     const allRaces = await apiSports(`/races?season=${SEASON}`)
 
+    // Return raw response for debugging if no races
     if (!allRaces?.length) {
-      return res.status(200).json({ race: null, drivers: [], debug: 'no races returned' })
+      // Try fetching seasons to verify API connection
+      const seasons = await apiSports('/seasons')
+      return res.status(200).json({
+        race: null,
+        drivers: [],
+        debug: 'no races returned',
+        seasonsAvailable: seasons?.slice(0, 5) || 'seasons endpoint also failed',
+        racesRaw: allRaces,
+      })
     }
 
     // Find the next upcoming race
