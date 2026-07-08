@@ -7,13 +7,15 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 ## 🔴 In progress / immediate
 
 - [x] Set up Resend for transactional email (`noreply@bynapp.online` sending, welcome and round settled emails live)
-- [ ] Fix southscale.co.uk legal page routing (404 on `/legal/byn-privacy` and `/legal/byn-terms`)
+- [x] Fix southscale.co.uk legal page routing (404 on `/legal/byn-privacy` and `/legal/byn-terms`)
 
 ---
 
 ## 🟣 User account management
 
-- [ ] **Delete Account button** — add to Profile tab. On confirmation, schedule account for deletion after a 60-day cooling-off period. During this period the Google account cannot be reused to create a new BYN account. After 60 days, all personal data is purged from Supabase. User should receive a confirmation email at deletion request and a reminder before the 60 days expires. Required for GDPR compliance (right to erasure).
+- [x] **Delete Account button** — added to Profile tab with 60-day cooling-off period, confirmation email, and cancel option. Google account blocked from re-registration during cooling-off period.
+- [x] **Privacy Policy link** — added to Profile tab linking to southscale.co.uk/legal/byn-privacy
+- [x] **Terms of Service link** — added to Profile tab linking to southscale.co.uk/legal/byn-terms
 
 ---
 
@@ -143,3 +145,6 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 - [x] SouthScale company website live at southscale.co.uk
 - [x] Privacy Policy and Terms of Service drafted and hosted
 - [x] Transactional email via Resend — welcome email and round settled email sending from noreply@bynapp.online
+- [x] Delete Account button on Profile tab — 60-day cooling-off, confirmation email, cancel option
+- [x] Privacy Policy and Terms of Service links added to Profile tab
+- [x] southscale.co.uk legal page routing fixed
