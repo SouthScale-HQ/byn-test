@@ -51,15 +51,15 @@ function devig(decimalOdds) {
 
 // ── MAIN ENTRY POINT ──────────────────────────────────────────────────────────
 export async function fetchUpcomingFixtures(competitionKey, daysAhead = 14) {
-  // API disabled during testing — remove this return to re-enable
-  return []
-
-  // eslint-disable-next-line no-unreachable
-  // F1 uses API-Sports via /api/f1-fixtures serverless function
+  // F1 uses API-Sports regardless of Odds API status
   if (competitionKey === 'f1') {
     return fetchF1Fixtures()
   }
 
+  // Odds API disabled during testing — remove this return to re-enable
+  return []
+
+  // eslint-disable-next-line no-unreachable
   const sportKey = SPORT_KEY_MAP[competitionKey]
   if (!sportKey) return []
   if (OUTRIGHT_COMPS.has(competitionKey)) return fetchOutrightOdds(competitionKey, daysAhead)
