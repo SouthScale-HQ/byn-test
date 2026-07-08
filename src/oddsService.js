@@ -33,7 +33,7 @@ async function fetchF1Fixtures() {
       kickoff: data.race.date,
       externalId: `f1-${data.race.id}`,
       format: 'outright',
-      outcomes: data.drivers.map(d => d.name),
+      outcomes: data.drivers.map(d => `${d.fullName} · ${d.team}`),
       probabilities: data.drivers.map(d => d.probability),
       driverDetails: data.drivers,
     }]
