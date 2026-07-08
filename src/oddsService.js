@@ -17,6 +17,32 @@ const SPORT_KEY_MAP = {
 
 const OUTRIGHT_COMPS = new Set(['pga'])
 
+// ── F1 fixtures via API-Sports (/api/f1-fixtures serverless function) ─────────
+async function fetchF1Fixtures() {
+  try {
+    const res = await fetch('/api/f1-fixtures')
+    if (!res.ok) return []
+    const data = await res.json()
+
+    if (!data.race || !data.drivers?.length) return []
+
+    return [{
+      name: data.race.name,
+      circuit: data.race.circuit,
+      location: data.race.location,
+      kickoff: data.race.date,
+      externalId: `f1-${data.race.id}`,
+      format: 'outright',
+      outcomes: data.drivers.map(d => d.name),
+      probabilities: data.drivers.map(d => d.probability),
+      driverDetails: data.drivers,
+    }]
+  } catch (err) {
+    console.error('Error fetching F1 fixtures:', err)
+    return []
+  }
+}
+
 function devig(decimalOdds) {
   const implied = decimalOdds.map((o) => 1 / Math.max(o, 1.01))
   const total = implied.reduce((a, p) => a + p, 0)
@@ -29,6 +55,11 @@ export async function fetchUpcomingFixtures(competitionKey, daysAhead = 14) {
   return []
 
   // eslint-disable-next-line no-unreachable
+  // F1 uses API-Sports via /api/f1-fixtures serverless function
+  if (competitionKey === 'f1') {
+    return fetchF1Fixtures()
+  }
+
   const sportKey = SPORT_KEY_MAP[competitionKey]
   if (!sportKey) return []
   if (OUTRIGHT_COMPS.has(competitionKey)) return fetchOutrightOdds(competitionKey, daysAhead)

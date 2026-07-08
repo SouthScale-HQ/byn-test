@@ -22,11 +22,7 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 ## 🟤 API & performance
 
 - [x] **Reduce live odds API calls** — fixtures now cached in Supabase `round_fixtures` table. API called once per competition per round only. Subsequent loads (page refresh, re-navigation) read from cache. Cache valid for 24 hours. API skipped entirely if round already seeded (`cd.liveSeeded === true`).
-- [ ] **F1 alternative odds source** — F1 is not available on The Odds API. Investigate alternatives:
-  - **API-Sports** (api-sports.io) — covers Formula 1 race results and standings. Has a free tier (100 req/day). Would need a new `VITE_API_SPORTS_KEY` env var and a new fetch function in `oddsService.js`.
-  - **Sportradar** — comprehensive motorsport coverage including F1 qualifying and race odds, but more expensive and complex to integrate.
-  - **Recommended starting point:** API-Sports free tier for race fixture data (to get real race names and dates), even if outright odds aren't available — better than the current hardcoded `F1_ROUNDS` array. Wire race winner odds separately if a bookmaker API becomes available.
-  - Sign up at api-sports.io, add `VITE_API_SPORTS_KEY` to Vercel env vars, add F1 fetch function to `oddsService.js` mapping to `f1` competition key.
+- [x] **F1 alternative odds source** — API-Sports integrated via `/api/f1-fixtures` serverless function. Provides real race name, circuit, date and driver list. Driver probabilities estimated from championship standings points. `API_SPORTS_KEY` stored in Vercel env vars. Will activate with Odds API when testing is complete.
 
 ---
 
