@@ -29,7 +29,8 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 - [ ] **IPL probability model** — research free cricket API (cricbuzz, cricketdata.org). Components: current tournament form (50%), venue/pitch history (30%), team H2H (20%).
 
 - [x] **Reduce live odds API calls** — fixtures now cached in Supabase `round_fixtures` table. API called once per competition per round only. Subsequent loads (page refresh, re-navigation) read from cache. Cache valid for 24 hours. API skipped entirely if round already seeded (`cd.liveSeeded === true`).
-- [x] **F1 alternative odds source** — live at bynapp.online/app under Motorsport → F1. Uses OpenF1 (free, no API key) for real race name, circuit, location and kickoff time. Top 8 drivers shown with championship-based probabilities. Update `DRIVERS_2026` in `api/f1-fixtures.js` as season progresses.
+- [x] **F1 alternative odds source** — Uses OpenF1 (free, no API key) via `/api/f1-fixtures.js` serverless function. Shows all 20 drivers with full names and team names (e.g. "Lando Norris · McLaren"). Probability model combines: current 2026 season points (50%), 2025 final standings (30%), circuit-specific history (20%). Loads on app mount and refreshes automatically on next round. API-Sports free plan does not include current season data.
+- [ ] **F1 demo simulation limitation** — live F1 fixture data loads correctly for the current round but does not carry through to the next round in the demo simulator. The simulated next round falls back to mock data (8 drivers, abbreviations). This is a demo-only issue — in production, real rounds advance based on actual race weekends so the fixture will always be fresh. Low priority — accept as a known demo limitation until real round advancement is built.
 
 ---
 
@@ -87,7 +88,7 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 
 - [ ] **Remove demo simulator buttons** — "Simulate results", "Advance to lockout" etc. before go-live
 - [x] **Landing page for bynapp.online** — live at bynapp.online root. App served at bynapp.online/app. Includes phone mockup, how it works, sports list, features, and App Store/Google Play placeholders.
-- [ ] **Kickoff time display** — `formatKickoff()` function built and wired into market cards (betting and settled stages). Shows "Today 20:00", "Tomorrow 15:00", "Sat 12 Jul 17:30" etc. **Needs verification once Odds API is re-enabled** — demo fixtures have no kickoff data so times only appear with live fixtures.
+- [ ] **Kickoff time display** — `formatKickoff()` function built and wired into market cards (betting and settled stages). Shows "Today 20:00", "Tomorrow 15:00", "Sat 12 Jul 17:30" etc. Working for F1 (confirmed). **Needs verification for football/tennis/golf once Odds API is re-enabled** — demo fixtures have no kickoff data so times only appear with live fixtures.
 - [ ] **Bet history tab** — view all past bets within a competition, not just current round
 - [ ] **Onboarding tour** — guided first-time user experience (highlight key features on first login)
 - [ ] **Dark/light mode** — currently dark only
@@ -149,3 +150,9 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 - [x] southscale.co.uk legal page routing fixed
 - [x] Live odds API calls reduced — fixtures cached in Supabase, API called once per round per competition only
 - [x] Admin reporting dashboard live at southscale.co.uk/admin
+- [x] Landing page live at bynapp.online — app served at bynapp.online/app
+- [x] F1 integration via OpenF1 — all 20 drivers, full names, team names, real race name and kickoff time
+- [x] F1 probability model — current season 50%, previous season 30%, circuit history 20%
+- [x] Kickoff time display on market cards — working for F1, pending Odds API re-enable for other sports
+- [x] Season rankings reset at end of season
+- [x] Odds API calls cached in Supabase — one API call per competition per round maximum
