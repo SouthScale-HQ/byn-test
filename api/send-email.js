@@ -9,20 +9,25 @@ const FROM_ADDRESS    = 'BYN <noreply@bynapp.online>'
 
 // ── Fetch active sponsor from Supabase ────────────────────────────────────────
 async function getActiveSponsor() {
-  if (!SUPABASE_URL || !SERVICE_KEY) return null
+  if (!SUPABASE_URL || !SERVICE_KEY) {
+    console.log('Sponsor fetch: missing env vars')
+    return null
+  }
   try {
-    const res = await fetch(
-      `${SUPABASE_URL}/rest/v1/sponsor_slots?active=eq.true&placement=eq.email&limit=1&select=*`,
-      {
-        headers: {
-          apikey: SERVICE_KEY,
-          Authorization: `Bearer ${SERVICE_KEY}`,
-        },
-      }
-    )
+    const url = `${SUPABASE_URL}/rest/v1/sponsor_slots?active=eq.true&placement=eq.email&limit=1&select=*`
+    console.log('Fetching sponsor from:', url)
+    const res = await fetch(url, {
+      headers: {
+        apikey: SERVICE_KEY,
+        Authorization: `Bearer ${SERVICE_KEY}`,
+      },
+    })
+    console.log('Sponsor response status:', res.status)
     const data = await res.json()
+    console.log('Sponsor data:', JSON.stringify(data))
     return data?.[0] || null
-  } catch {
+  } catch (err) {
+    console.error('Sponsor fetch error:', err)
     return null
   }
 }
