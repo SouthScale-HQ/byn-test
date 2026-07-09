@@ -132,37 +132,41 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 - [x] Bets saving to Supabase
 - [x] Bet settlement writing to DB
 - [x] Season reset (balances + leaderboards)
-- [x] Live odds from The Odds API (World Cup, Wimbledon ATP/WTA, The Open)
+- [x] Live odds from The Odds API (World Cup, Wimbledon, The Open)
 - [x] Unique display names with normalised uniqueness check
 - [x] Referral system (500 nuts each)
 - [x] Ad boost (50 nuts per view, 1000/round cap)
 - [x] Private leagues with invite codes
 - [x] Profile tab with user info, favourite teams, league slots, ad boost
-- [x] Rankings with global / country / team filters
 - [x] Deployed to bynapp.online via Vercel
 - [x] GitHub transferred to SouthScale-HQ
 - [x] Google Cloud transferred to andrew@southscale.co.uk
 - [x] SouthScale company website live at southscale.co.uk
-- [x] Privacy Policy and Terms of Service drafted and hosted
-- [x] Transactional email via Resend — welcome email and round settled email sending from noreply@bynapp.online
+- [x] Privacy Policy and Terms of Service drafted and hosted at southscale.co.uk
+- [x] Transactional email via Resend — welcome and round settled emails from noreply@bynapp.online
 - [x] Delete Account button on Profile tab — 60-day cooling-off, confirmation email, cancel option
 - [x] Privacy Policy and Terms of Service links added to Profile tab
 - [x] southscale.co.uk legal page routing fixed
-- [x] Live odds API calls reduced — fixtures cached in Supabase, API called once per round per competition only
+- [x] Live odds API calls cached in Supabase — one API call per competition per round maximum
 - [x] Admin reporting dashboard live at southscale.co.uk/admin
 - [x] Landing page live at bynapp.online — app served at bynapp.online/app
 - [x] F1 integration via OpenF1 — all 20 drivers, full names, team names, real race name and kickoff time
 - [x] F1 probability model — current season 50%, previous season 30%, circuit history 20%
 - [x] Kickoff time display on market cards — working for F1, pending Odds API re-enable for other sports
 - [x] Season rankings reset at end of season
-- [x] Odds API calls cached in Supabase — one API call per competition per round maximum
-- [x] Sponsor banner in all transactional emails — fetched from `sponsor_slots` table, falls back to house ad, positioned above footer, clearly labelled "Sponsored"
+- [x] Sponsor banner in all transactional emails — fetched from `sponsor_slots` table, falls back to house ad, positioned above footer, labelled "Sponsored"
 - [x] Settlement email subject changed to "Round X settled — See your results"
 - [x] Nut values rounded to whole numbers in settlement emails
 - [x] Bet settlement writing to DB fixed — using update instead of upsert
-- [x] Landing page live at bynapp.online — app served at bynapp.online/app
-- [x] F1 integration via OpenF1 — all 20 drivers, full names, team names, real race name and kickoff time
-- [x] F1 probability model — current season 50%, previous season 30%, circuit history 20%
+- [x] Simplified navigation — single-tier competition buttons (3 visible), pizza stack menu (☰) for all competitions + Games/Leagues/Rankings/Profile/How to Play/Sign out
+- [x] Competition row shows user's active competitions first, then rest by default order
+- [x] Rankings tab — competition selector, global/country/team filters, league rankings shown below
+- [x] Leagues tab — expandable league cards with full leaderboard, invite code, and sponsor slot
+- [x] Balance/commitment card hidden on Leagues and Rankings tabs
+- [x] Competition row hidden on Leagues and Rankings tabs
+- [x] Team filter tab hidden in Rankings when no teams applicable or team not yet selected
+- [x] ATP and WTA combined into single Wimbledon competition — matches prefixed [M]/[W]
+- [x] Rankings/Leagues tabs accessible via pizza stack menu only (no redundant tab buttons on main screen)
 - [x] Kickoff time display on market cards — working for F1, pending Odds API re-enable for other sports
 - [x] Season rankings reset at end of season
 - [x] Odds API calls cached in Supabase — one API call per competition per round maximum
