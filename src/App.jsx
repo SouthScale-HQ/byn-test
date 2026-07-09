@@ -1133,8 +1133,8 @@ export default function PlatformMock() {
           </div>
         )}
 
-        {/* Single-tier competition buttons — user's active comps first, then rest */}
-        {(() => {
+        {/* Single-tier competition buttons — only shown on Games tab */}
+        {tab === "markets" && (() => {
           const activeComps = COMPETITIONS.filter((c) => c.active);
           // User is "active" in a comp if they have bets or non-zero balance
           const userActive = activeComps.filter((c) => {
@@ -1170,7 +1170,6 @@ export default function PlatformMock() {
             </div>
           );
         })()}
-
         {tab === "profile" && (
           <ProfileSummaryScreen
             userName={userName}
