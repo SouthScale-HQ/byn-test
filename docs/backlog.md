@@ -88,7 +88,7 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 
 - [ ] **Remove demo simulator buttons** — "Simulate results", "Advance to lockout" etc. before go-live
 - [x] **Landing page for bynapp.online** — live at bynapp.online root. App served at bynapp.online/app. Includes phone mockup, how it works, sports list, features, and App Store/Google Play placeholders.
-- [ ] **Kickoff time display** — `formatKickoff()` function built and wired into market cards (betting and settled stages). Shows "Today 20:00", "Tomorrow 15:00", "Sat 12 Jul 17:30" etc. Working for F1 (confirmed). **Needs verification for football/tennis/golf once Odds API is re-enabled** — demo fixtures have no kickoff data so times only appear with live fixtures.
+- [ ] **Per-league ranking in settlement email** — round settled email currently shows balance and payout only. Add ranking breakdown per league the user is in (global, country, private leagues). Requires fetching user's league memberships from Supabase at settlement time and calculating their rank in each. Show as a table: "Global: 14th · England: 3rd · The Lads: 1st 🏆". and wired into market cards (betting and settled stages). Shows "Today 20:00", "Tomorrow 15:00", "Sat 12 Jul 17:30" etc. Working for F1 (confirmed). **Needs verification for football/tennis/golf once Odds API is re-enabled** — demo fixtures have no kickoff data so times only appear with live fixtures.
 - [ ] **Bet history tab** — view all past bets within a competition, not just current round
 - [ ] **Onboarding tour** — guided first-time user experience (highlight key features on first login)
 - [ ] **Dark/light mode** — currently dark only
@@ -150,6 +150,16 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 - [x] southscale.co.uk legal page routing fixed
 - [x] Live odds API calls reduced — fixtures cached in Supabase, API called once per round per competition only
 - [x] Admin reporting dashboard live at southscale.co.uk/admin
+- [x] Landing page live at bynapp.online — app served at bynapp.online/app
+- [x] F1 integration via OpenF1 — all 20 drivers, full names, team names, real race name and kickoff time
+- [x] F1 probability model — current season 50%, previous season 30%, circuit history 20%
+- [x] Kickoff time display on market cards — working for F1, pending Odds API re-enable for other sports
+- [x] Season rankings reset at end of season
+- [x] Odds API calls cached in Supabase — one API call per competition per round maximum
+- [x] Sponsor banner in all transactional emails — fetched from `sponsor_slots` table, falls back to house ad, positioned above footer, clearly labelled "Sponsored"
+- [x] Settlement email subject changed to "Round X settled — See your results"
+- [x] Nut values rounded to whole numbers in settlement emails
+- [x] Bet settlement writing to DB fixed — using update instead of upsert
 - [x] Landing page live at bynapp.online — app served at bynapp.online/app
 - [x] F1 integration via OpenF1 — all 20 drivers, full names, team names, real race name and kickoff time
 - [x] F1 probability model — current season 50%, previous season 30%, circuit history 20%
