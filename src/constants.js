@@ -15,12 +15,19 @@ export const CATEGORIES = [
 
 // ── Team pools — realistic de-vigged opening probabilities ────────────────────
 // Format: [home_prob, draw_prob, away_prob]
+// Premier League 2026-27 — Gameweek 1 fixtures (21-24 Aug 2026)
+// Probabilities are de-vigged opening estimates
 export const TEAM_POOL_EPL = [
-  ["Arsenal",        "Chelsea",         [0.52, 0.25, 0.23]],
-  ["Liverpool",      "Man City",        [0.38, 0.26, 0.36]],
-  ["Spurs",          "Man United",      [0.44, 0.27, 0.29]],
-  ["Newcastle",      "Aston Villa",     [0.45, 0.27, 0.28]],
-  ["Brighton",       "West Ham",        [0.48, 0.27, 0.25]],
+  ["Arsenal",          "Coventry City",     [0.78, 0.12, 0.10]],
+  ["Hull City",        "Man United",        [0.32, 0.26, 0.42]],
+  ["Everton",          "Crystal Palace",    [0.44, 0.27, 0.29]],
+  ["Ipswich Town",     "Sunderland",        [0.42, 0.28, 0.30]],
+  ["Nottm Forest",     "Leeds United",      [0.48, 0.26, 0.26]],
+  ["Brentford",        "Tottenham",         [0.36, 0.26, 0.38]],
+  ["Brighton",         "Aston Villa",       [0.40, 0.27, 0.33]],
+  ["Man City",         "Bournemouth",       [0.72, 0.15, 0.13]],
+  ["Newcastle United", "Liverpool",         [0.38, 0.27, 0.35]],
+  ["Fulham",           "Chelsea",           [0.34, 0.27, 0.39]],
 ];
 export const TEAM_POOL_LA_LIGA = [
   ["Real Madrid",    "Barcelona",       [0.40, 0.25, 0.35]],
@@ -127,7 +134,7 @@ export const PGA_ROUNDS     = ["The Masters","PGA Championship","The Open","US O
 // ── Competitions ──────────────────────────────────────────────────────────────
 // active: true = visible in UI. Set false to hide without deleting.
 export const COMPETITIONS = [
-  { key: "epl",         category: "football",         name: "EPL",               cadenceLabel: "Gameweek",  format: "three_way",         teamPool: TEAM_POOL_EPL,         midLabel: "Draw", special: false, baseLiquidity: 400, active: true  },
+  { key: "epl",         category: "football",         name: "Premier League",    cadenceLabel: "Gameweek",  format: "three_way",         teamPool: TEAM_POOL_EPL,         midLabel: "Draw", special: false, baseLiquidity: 400, active: true  },
   { key: "laliga",      category: "football",         name: "La Liga",           cadenceLabel: "Matchday",  format: "three_way",         teamPool: TEAM_POOL_LA_LIGA,     midLabel: "Draw", special: false, baseLiquidity: 380, active: true  },
   { key: "ucl",         category: "football",         name: "Champions League",  cadenceLabel: "Matchweek", format: "three_way",         teamPool: TEAM_POOL_UCL,         midLabel: "Draw", special: false, baseLiquidity: 380, active: false },
   { key: "fifa_wc",     category: "football",         name: "World Cup",         cadenceLabel: "Round",     format: "three_way_no_draw", teamPool: TEAM_POOL_FIFA_WC,                       special: false, baseLiquidity: 450, active: true  },

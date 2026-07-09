@@ -23,14 +23,18 @@ The Odds API fixtures typically appear **1–2 weeks before the first match**. R
 
 ## ⚽ FOOTBALL
 
-### EPL (English Premier League)
+### Premier League (EPL)
 | Season | Start | End | BYN activate by | Odds API key |
 |---|---|---|---|---|
 | 2026–27 | **21 Aug 2026** | 30 May 2027 | **22 Jul 2026** | `soccer_epl` |
 | 2027–28 | ~Aug 2027 | ~May 2028 | ~Jul 2027 | `soccer_epl` |
 
 - BYN key: `epl` · Format: `three_way` · Rounds: 38
-- Season fixtures released: June each year
+- 20 teams: Arsenal (champions), Man City, Liverpool, Chelsea, Newcastle, Brighton, Aston Villa, Spurs, Nottm Forest, Brentford, Fulham, Man Utd, Everton, Crystal Palace, Bournemouth, Ipswich Town, Coventry City, Hull City, Leeds United, Sunderland
+- Promoted 2026: Coventry City (champions), Hull City, Leeds United, Sunderland
+- Relegated 2026: West Ham, Burnley, Wolves
+- Gameweek 1 (21–24 Aug): Arsenal vs Coventry, Hull vs Man Utd, Everton vs Crystal Palace, Ipswich vs Sunderland, Nottm Forest vs Leeds, Brentford vs Spurs, Brighton vs Aston Villa, Man City vs Bournemouth, Newcastle vs Liverpool, Fulham vs Chelsea
+- Season fixtures released: 19 June 2026 (already available)
 - **Status: ⏳ Active (off-season, demo fixtures) — activate 22 Jul 2026**
 
 ---
