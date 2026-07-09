@@ -1229,6 +1229,7 @@ export default function PlatformMock() {
               </div>
             )}
 
+            {tab === "markets" && (
             <div style={card}>
               <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, color: "#9DBFAF", marginBottom: 6 }}>
                 <span style={{ display: "flex", alignItems: "center", gap: 5 }}><Wallet size={13} /> {comp.name} balance carried in: <span className="mono" style={{ color: "#F4F7F2" }}>{Math.round(cd.balance)}</span> + {WEEKLY_TOPUP} nuts this round</span>
@@ -1247,6 +1248,7 @@ export default function PlatformMock() {
                   : `Need ${Math.round(minRequired - committed)} more staked before lockout, or that shortfall is forfeited (max loss: 50% of ${Math.round(startOfRound)}).`}
               </div>
             </div>
+            )}
 
 
             {tab === "leagues" && (
