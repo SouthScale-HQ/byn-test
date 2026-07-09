@@ -324,6 +324,7 @@ export default function PlatformMock() {
   const [activeCategoryKey, setActiveCategoryKey] = useState("football");
   const [activeCompKey, setActiveCompKey] = useState("epl");
   const [tab, setTab] = useState("markets");
+  const [menuOpen, setMenuOpen] = useState(false);
   const [compData, setCompData] = useState(() => Object.fromEntries(COMPETITIONS.map((c) => [c.key, initCompetitionState(c)])));
 
   const [stakeInput, setStakeInput] = useState(150);
@@ -1065,71 +1066,101 @@ export default function PlatformMock() {
             </div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <button
-              onClick={() => setTab(tab === "profile" ? "markets" : "profile")}
-              title="Profile"
-              style={{ height: 34, padding: "0 10px", borderRadius: 17, border: `1px solid ${tab === "profile" ? "#2FA86C" : "#1c5f3f"}`, background: tab === "profile" ? "#16352A" : "transparent", color: tab === "profile" ? "#2FA86C" : "#7FBFA0", display: "flex", alignItems: "center", justifyContent: "center", gap: 5 }}
-            >
-              <User size={15} />
-              <span style={{ fontSize: 15, lineHeight: 1 }}>{FLAG_MAP[userCountry] || "🏳️"}</span>
-            </button>
-            <button
-              onClick={() => setTab(tab === "howto" ? "markets" : "howto")}
-              title="How to play"
-              style={{ width: 34, height: 34, borderRadius: "50%", border: `1px solid ${tab === "howto" ? "#2FA86C" : "#1c5f3f"}`, background: tab === "howto" ? "#16352A" : "transparent", color: tab === "howto" ? "#2FA86C" : "#7FBFA0", display: "flex", alignItems: "center", justifyContent: "center" }}
-            >
-              <HelpCircle size={15} />
-            </button>
-            <button
-              onClick={signOut}
-              title="Sign out"
-              className="sg"
-              style={{ height: 34, padding: "0 10px", borderRadius: 17, border: "1px solid #1c5f3f", background: "transparent", color: "#5E8775", fontSize: 11, fontWeight: 600 }}
-            >
-              Sign out
-            </button>
             <StageBadge stage={gated ? "gated" : cd.stage} />
+            {/* Pizza stack menu button */}
+            <button
+              onClick={() => setMenuOpen((o) => !o)}
+              style={{ width: 36, height: 36, borderRadius: 10, border: `1px solid ${menuOpen ? "#2FA86C" : "#1c5f3f"}`, background: menuOpen ? "#16352A" : "transparent", color: menuOpen ? "#2FA86C" : "#7FBFA0", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 4, cursor: "pointer" }}
+            >
+              <div style={{ width: 16, height: 2, background: "currentColor", borderRadius: 1 }} />
+              <div style={{ width: 16, height: 2, background: "currentColor", borderRadius: 1 }} />
+              <div style={{ width: 16, height: 2, background: "currentColor", borderRadius: 1 }} />
+            </button>
           </div>
         </div>
 
-        {/* Category switcher — only shows categories with at least one active competition */}
-        <div style={{ display: "flex", gap: 6, marginBottom: 8, overflowX: "auto" }}>
-          {CATEGORIES.filter((c) => COMPETITIONS.some((comp) => comp.category === c.key && comp.active)).map((c) => (
-            <button
-              key={c.key}
-              onClick={() => selectCategory(c.key)}
-              className="sg"
-              style={{
-                padding: "8px 14px", borderRadius: 999, fontSize: 12, fontWeight: 600, whiteSpace: "nowrap",
-                border: `1px solid ${activeCategoryKey === c.key ? "#2FA86C" : "#1c5f3f"}`,
-                background: activeCategoryKey === c.key ? "#16352A" : "transparent",
-                color: activeCategoryKey === c.key ? "#2FA86C" : "#9DBFAF",
-              }}
-            >
-              {c.name}
-            </button>
-          ))}
-        </div>
+        {/* Pizza stack menu overlay */}
+        {menuOpen && (
+          <div style={{ position: "fixed", inset: 0, zIndex: 100, display: "flex" }}>
+            {/* Backdrop */}
+            <div style={{ flex: 1 }} onClick={() => setMenuOpen(false)} />
+            {/* Menu panel */}
+            <div style={{ width: 260, background: "#0A1F1A", borderLeft: "1px solid #1c5f3f", height: "100%", overflowY: "auto", padding: "20px 0" }}>
+              {/* Close button */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "0 16px 16px", borderBottom: "1px solid #16352A" }}>
+                <span className="sg" style={{ fontSize: 13, fontWeight: 700, color: "#7FBFA0", letterSpacing: 1, textTransform: "uppercase" }}>Menu</span>
+                <button onClick={() => setMenuOpen(false)} style={{ background: "none", border: "none", color: "#7FBFA0", fontSize: 18, cursor: "pointer", lineHeight: 1 }}>✕</button>
+              </div>
 
-        {/* Competition switcher — always visible */}
-        <div style={{ display: "flex", gap: 6, marginBottom: 12, overflowX: "auto" }}>
-          {compsInCategory.map((c) => (
-            <button
-              key={c.key}
-              onClick={() => { selectCompetition(c.key); setTab("markets"); }}
-              className="mono"
-              style={{
-                padding: "6px 12px", borderRadius: 8, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap", display: "flex", alignItems: "center", gap: 4,
-                border: `1px solid ${activeCompKey === c.key ? "#2FA86C" : "#16352A"}`,
-                background: activeCompKey === c.key ? "#16352A" : "#0F2920",
-                color: activeCompKey === c.key ? "#2FA86C" : "#9DBFAF",
-              }}
-            >
-              {c.special && <CalendarClock size={11} />}
-              {c.name}
-            </button>
-          ))}
-        </div>
+              {/* All competitions */}
+              <div style={{ padding: "12px 16px 4px" }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#5E8775", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 8 }}>Competitions</div>
+                {COMPETITIONS.filter((c) => c.active).map((c) => (
+                  <button key={c.key} onClick={() => { selectCompetition(c.key); setTab("markets"); setMenuOpen(false); }} className="sg"
+                    style={{ width: "100%", textAlign: "left", padding: "10px 12px", borderRadius: 8, border: "none", background: activeCompKey === c.key ? "#16352A" : "transparent", color: activeCompKey === c.key ? "#2FA86C" : "#D9E5DE", fontSize: 14, fontWeight: activeCompKey === c.key ? 700 : 400, marginBottom: 2, cursor: "pointer", display: "flex", alignItems: "center", gap: 8 }}>
+                    {activeCompKey === c.key && <div style={{ width: 4, height: 4, borderRadius: "50%", background: "#2FA86C", flexShrink: 0 }} />}
+                    {c.name}
+                  </button>
+                ))}
+              </div>
+
+              {/* Navigation */}
+              <div style={{ padding: "16px 16px 4px", borderTop: "1px solid #16352A", marginTop: 8 }}>
+                <div style={{ fontSize: 10, fontWeight: 700, color: "#5E8775", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 8 }}>Navigate</div>
+                {[
+                  { label: "Games", icon: "🎮", t: "markets" },
+                  { label: "Leagues", icon: "🏆", t: "leagues" },
+                  { label: "Rankings", icon: "📊", t: "rankings" },
+                  { label: "Profile", icon: "👤", t: "profile" },
+                  { label: "How to play", icon: "❓", t: "howto" },
+                ].map(({ label, icon, t }) => (
+                  <button key={t} onClick={() => { setTab(t); setMenuOpen(false); }} className="sg"
+                    style={{ width: "100%", textAlign: "left", padding: "10px 12px", borderRadius: 8, border: "none", background: tab === t ? "#16352A" : "transparent", color: tab === t ? "#2FA86C" : "#D9E5DE", fontSize: 14, fontWeight: tab === t ? 700 : 400, marginBottom: 2, cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
+                    <span style={{ fontSize: 16 }}>{icon}</span>{label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Sign out */}
+              <div style={{ padding: "16px 16px 0", borderTop: "1px solid #16352A", marginTop: 8 }}>
+                <button onClick={() => { signOut(); setMenuOpen(false); }} className="sg"
+                  style={{ width: "100%", textAlign: "left", padding: "10px 12px", borderRadius: 8, border: "none", background: "transparent", color: "#5E8775", fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
+                  <span style={{ fontSize: 16 }}>↩️</span>Sign out
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Single-tier competition buttons — 4 visible, active comp highlighted */}
+        {(() => {
+          const activeComps = COMPETITIONS.filter((c) => c.active);
+          const pinned = activeComps.slice(0, 4);
+          return (
+            <div style={{ display: "flex", gap: 6, marginBottom: 12, overflowX: "auto" }}>
+              {pinned.map((c) => (
+                <button key={c.key} onClick={() => { selectCompetition(c.key); setTab("markets"); }} className="sg"
+                  style={{ padding: "7px 13px", borderRadius: 8, fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer",
+                    border: `1px solid ${activeCompKey === c.key ? "#2FA86C" : "#16352A"}`,
+                    background: activeCompKey === c.key ? "#16352A" : "#0F2920",
+                    color: activeCompKey === c.key ? "#2FA86C" : "#9DBFAF",
+                  }}>
+                  {c.name}
+                </button>
+              ))}
+              {activeComps.length > 4 && (
+                <button onClick={() => setMenuOpen(true)} className="sg"
+                  style={{ padding: "7px 13px", borderRadius: 8, fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer",
+                    border: `1px solid ${!pinned.find(c => c.key === activeCompKey) ? "#2FA86C" : "#16352A"}`,
+                    background: !pinned.find(c => c.key === activeCompKey) ? "#16352A" : "#0F2920",
+                    color: !pinned.find(c => c.key === activeCompKey) ? "#2FA86C" : "#9DBFAF",
+                  }}>
+                  {!pinned.find(c => c.key === activeCompKey) ? `• ${comp.name}` : `+${activeComps.length - 4} more`}
+                </button>
+              )}
+            </div>
+          );
+        })()}
 
         {tab === "profile" && (
           <ProfileSummaryScreen
