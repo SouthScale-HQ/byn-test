@@ -78,55 +78,60 @@ function h2hScore(home, away) {
   return total > 0 ? score / total : 0.5
 }
 
-// ── Championship 2026-27 team strength ratings ────────────────────────────────
+// ── Championship 2026-27 (24 teams) ─────────────────────────────────────────
 // Relegated from PL: West Ham, Burnley, Wolves
-// Promoted from L1: Bolton, Lincoln City + 1 more
+// Relegated from Championship: Sheffield Wednesday (admin), Plymouth Argyle, Luton Town → L1
+// Promoted from L1: Bolton Wanderers, Lincoln City, Charlton Athletic (back after short stay)
 const CHAMPIONSHIP_RATINGS = {
-  'West Ham':          85, 'Wolves':           83, 'Southampton':      78,
-  'Sheffield United':  76, 'Wrexham':          75, 'Burnley':          74,
-  'Middlesbrough':     73, 'Derby County':     72, 'Luton Town':       71,
-  'Watford':           70, 'Blackburn':        70, 'Norwich City':     69,
-  'Millwall':          68, 'Bristol City':     68, 'Cardiff City':     66,
-  'Preston':           67, 'Swansea City':     65, 'QPR':              64,
-  'Bolton':            70, 'Lincoln City':     65, 'Plymouth Argyle':  63,
-  'Stoke City':        62, 'Sheffield Wednesday': 60, 'Coventry City': 66,
+  'West Ham':            85, 'Wolves':             83, 'Southampton':        78,
+  'Sheffield United':    76, 'Wrexham':            75, 'Burnley':            74,
+  'Middlesbrough':       73, 'Derby County':       72, 'West Brom':          72,
+  'Watford':             71, 'Blackburn':          70, 'Norwich City':       69,
+  'Millwall':            68, 'Bristol City':       68, 'Cardiff City':       66,
+  'Preston':             67, 'Swansea City':       65, 'QPR':                64,
+  'Bolton':              70, 'Lincoln City':       65, 'Birmingham City':    68,
+  'Stoke City':          62, 'Portsmouth':         66, 'Charlton Athletic':  67,
 }
 
-// ── League One 2026-27 team strength ratings ──────────────────────────────────
-// Relegated from Championship: Oxford United, Leicester City + 1 more
+// ── League One 2026-27 (24 teams) ────────────────────────────────────────────
+// Relegated from Championship: Leicester City, Luton Town, Oxford United
+// Promoted from L2: Bromley, MK Dons, Cambridge United, Notts County
 const LEAGUE_ONE_RATINGS = {
-  'Leicester City':   83, 'Oxford United':    70, 'Stockport County': 72,
-  'Huddersfield':     71, 'Barnsley':         69, 'Wigan Athletic':   68,
-  'Wycombe':          65, 'Mansfield Town':   65, 'Charlton Athletic':64,
-  'Peterborough':     67, 'Exeter City':      66, 'Cambridge Utd':    63,
-  'Rotherham':        62, 'Fleetwood Town':   60, 'Burton Albion':    61,
-  'Shrewsbury':       59, 'Bristol Rovers':   60, 'Port Vale':        58,
-  'Stevenage':        62, 'Notts County':     65, 'Bromley':          63,
-  'Reading':          66, 'Leyton Orient':    64, 'Crawley Town':     59,
+  'Leicester City':     83, 'Luton Town':         78, 'Oxford United':      70,
+  'Stockport County':   72, 'Huddersfield':       71, 'Barnsley':           69,
+  'Wigan Athletic':     68, 'Sheffield Wednesday':65, 'Plymouth Argyle':    67,
+  'Wycombe':            65, 'Mansfield Town':     65, 'Peterborough':       67,
+  'Charlton Athletic':  64, 'Leyton Orient':      64, 'Exeter City':        66,
+  'Cambridge United':   65, 'Reading':            66, 'Burton Albion':      61,
+  'Notts County':       65, 'Bromley':            63, 'MK Dons':            63,
+  'Bristol Rovers':     60, 'Stevenage':          62, 'Blackpool':          61,
 }
 
-// ── League Two 2026-27 team strength ratings ──────────────────────────────────
+// ── League Two 2026-27 (24 teams) ────────────────────────────────────────────
+// Promoted from National League: York City, Rochdale, Boreham Wood
+// Relegated from L1: 4 clubs
 const LEAGUE_TWO_RATINGS = {
-  'AFC Wimbledon':    66, 'Swindon Town':     65, 'Doncaster':        64,
-  'Grimsby Town':     62, 'Colchester':       61, 'Newport County':   60,
-  'Gillingham':       62, 'Salford City':     63, 'Bradford City':    61,
-  'Carlisle United':  60, 'Morecambe':        58, 'Tranmere':         59,
-  'Barrow':           58, 'MK Dons':          63, 'Harrogate':        57,
-  'Sutton United':    59, 'Forest Green':     56, 'Chesterfield':     64,
-  'Accrington':       55, 'Rochdale':         63, 'York City':        66,
-  'Dag & Red':        62, 'Boreham Wood':     58, 'Ebbsfleet':        57,
+  'York City':          66, 'Rochdale':           63, 'Chesterfield':       64,
+  'AFC Wimbledon':      65, 'Swindon Town':       64, 'Doncaster':          63,
+  'Grimsby Town':       62, 'Colchester':         61, 'Newport County':     60,
+  'Gillingham':         62, 'Salford City':       63, 'Bradford City':      61,
+  'Carlisle United':    60, 'Morecambe':          58, 'Tranmere':           59,
+  'Barrow':             58, 'Harrogate':          57, 'Sutton United':      59,
+  'Forest Green':       56, 'Crawley Town':       60, 'Accrington':         55,
+  'Boreham Wood':       58, 'Ebbsfleet':          57, 'Dag & Red':          62,
 }
 
-// ── National League 2026-27 team strength ratings ─────────────────────────────
+// ── National League 2026-27 (24 teams) ───────────────────────────────────────
+// Relegated from L2: 2-3 teams
 const NATIONAL_LEAGUE_RATINGS = {
-  'York City':        66, 'Rochdale':         64, 'Halifax Town':     63,
-  'Dag & Red':        62, 'Maidstone':        61, 'Solihull Moors':   60,
-  'Altrincham':       60, 'Ebbsfleet':        59, 'Wealdstone':       58,
-  'Dover Athletic':   57, 'Bromley':          65, 'FC Halifax':       62,
-  'Hartlepool':       61, 'Woking':           58, 'Southend United':  60,
-  'Gateshead':        59, 'Eastleigh':        57, 'Torquay':          55,
-  'Maidenhead':       56, 'Fylde':            57, 'Kidderminster':    55,
-  'Spennymoor':       58, 'Boreham Wood':     60, 'Bath City':        55,
+  'Halifax Town':       63, 'Maidstone':          61, 'Altrincham':         62,
+  'Solihull Moors':     61, 'Hartlepool':         62, 'Southend United':    61,
+  'Gateshead':          60, 'FC Halifax':         59, 'Eastleigh':          59,
+  'Wealdstone':         58, 'Dover Athletic':     58, 'Woking':             57,
+  'Kidderminster':      57, 'Fylde':              58, 'Torquay':            56,
+  'Maidenhead':         57, 'Spennymoor':         59, 'Yeovil Town':        58,
+  'Boston United':      58, 'Chorley':            56, 'Bath City':          55,
+  'Slough Town':        55, 'Blyth Spartans':     55, 'Hereford':           54,
 }
 function internationalProb(home, away, neutral = true) {
   const pA = FIFA[home] ?? 1400
@@ -199,48 +204,69 @@ const FIXTURES = {
     { home: 'Real Betis',     away: 'Celta Vigo',      date: '2026-08-16T19:00:00Z', format: 'three_way' },
     { home: 'Villarreal',     away: 'Sevilla',         date: '2026-08-16T21:00:00Z', format: 'three_way' },
   ],
-  // EFL Championship — GW1 Aug 14-17 2026
-  // Fixtures released June 25 — Wolves vs Blackburn confirmed (Sky Sports opener)
-  // West Ham at Burnley confirmed. Others approximate.
+  // EFL Championship — GW1 Aug 14-17 2026 (24 teams, 12 matches)
+  // Confirmed: Wolves vs Blackburn (Fri Aug 14, Sky), West Ham at Burnley (opening wknd)
   championship: [
-    { home: 'Wolves',          away: 'Blackburn',      date: '2026-08-14T19:45:00Z', format: 'three_way' },
-    { home: 'Burnley',         away: 'West Ham',       date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Southampton',     away: 'Derby County',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Middlesbrough',   away: 'Norwich City',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Sheffield United',away: 'Watford',        date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Millwall',        away: 'Stoke City',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Cardiff City',    away: 'Swansea City',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Luton Town',      away: 'Preston',        date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Wrexham',         away: 'QPR',            date: '2026-08-16T15:00:00Z', format: 'three_way' },
-    { home: 'Bolton',          away: 'Bristol City',   date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Wolves',           away: 'Blackburn',        date: '2026-08-14T19:45:00Z', format: 'three_way' },
+    { home: 'Burnley',          away: 'West Ham',         date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Southampton',      away: 'Derby County',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Middlesbrough',    away: 'Norwich City',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Sheffield United', away: 'Watford',          date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Millwall',         away: 'Stoke City',       date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Cardiff City',     away: 'Bristol City',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Preston',          away: 'West Brom',        date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Wrexham',          away: 'QPR',              date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Bolton',           away: 'Birmingham City',  date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Lincoln City',     away: 'Swansea City',     date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Portsmouth',       away: 'Charlton Athletic',date: '2026-08-17T13:00:00Z', format: 'three_way' },
   ],
-  // EFL League One — GW1 Aug 14-16 2026
+  // EFL League One — GW1 Aug 14-16 2026 (24 teams, 12 matches)
+  // Relegated from Champ: Leicester City, Luton Town, Oxford United
+  // Promoted from L2: Bromley, MK Dons, Cambridge United, Notts County
   league_one: [
-    { home: 'Leicester City',  away: 'Stockport County', date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Oxford United',   away: 'Huddersfield',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Barnsley',        away: 'Wycombe',          date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Wigan Athletic',  away: 'Peterborough',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Charlton Athletic',away:'Leyton Orient',    date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Exeter City',     away: 'Mansfield Town',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Reading',         away: 'Rotherham',        date: '2026-08-16T15:00:00Z', format: 'three_way' },
-    { home: 'Notts County',    away: 'Bromley',          date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Leicester City',   away: 'Stockport County', date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Oxford United',    away: 'Huddersfield',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Barnsley',         away: 'Sheffield Wednesday',date:'2026-08-15T14:00:00Z',format: 'three_way' },
+    { home: 'Wigan Athletic',   away: 'Peterborough',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Charlton Athletic',away: 'Leyton Orient',    date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Exeter City',      away: 'Mansfield Town',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Reading',          away: 'Plymouth Argyle',  date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Cambridge United', away: 'Burton Albion',    date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Luton Town',       away: 'Wycombe',          date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Notts County',     away: 'MK Dons',          date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Bromley',          away: 'Bristol Rovers',   date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Stevenage',        away: 'Blackpool',        date: '2026-08-16T15:00:00Z', format: 'three_way' },
   ],
-  // EFL League Two — GW1 Aug 14-16 2026
+  // EFL League Two — GW1 Aug 14-16 2026 (24 teams, 12 matches)
+  // Promoted from National League: York City, Rochdale, Boreham Wood
   league_two: [
-    { home: 'AFC Wimbledon',   away: 'Swindon Town',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Doncaster',       away: 'Grimsby Town',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Colchester',      away: 'Newport County', date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Gillingham',      away: 'Salford City',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Bradford City',   away: 'MK Dons',        date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Chesterfield',    away: 'York City',      date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'AFC Wimbledon',    away: 'Swindon Town',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Doncaster',        away: 'Grimsby Town',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Colchester',       away: 'Newport County',   date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Gillingham',       away: 'Salford City',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Bradford City',    away: 'Chesterfield',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'York City',        away: 'Carlisle United',  date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Rochdale',         away: 'Morecambe',        date: '2026-08-15T14:00:00Z', format: 'three_way' },
+    { home: 'Tranmere',         away: 'Barrow',           date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Harrogate',        away: 'Sutton United',    date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Crawley Town',     away: 'Forest Green',     date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Accrington',       away: 'Boreham Wood',     date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Ebbsfleet',        away: 'Dag & Red',        date: '2026-08-16T15:00:00Z', format: 'three_way' },
   ],
-  // National League — GW1 approx mid-Aug 2026
+  // National League — GW1 mid-Aug 2026 (24 teams, 12 matches)
   national_league: [
-    { home: 'York City',       away: 'Rochdale',       date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Halifax Town',    away: 'Maidstone',      date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Dag & Red',       away: 'Solihull Moors', date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Hartlepool',      away: 'Altrincham',     date: '2026-08-15T14:00:00Z', format: 'three_way' },
-    { home: 'Ebbsfleet',       away: 'Wealdstone',     date: '2026-08-16T15:00:00Z', format: 'three_way' },
+    { home: 'Halifax Town',     away: 'Maidstone',        date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Altrincham',       away: 'Solihull Moors',   date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Hartlepool',       away: 'Southend United',  date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Wealdstone',       away: 'Dover Athletic',   date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Gateshead',        away: 'Eastleigh',        date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'FC Halifax',       away: 'Woking',           date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Kidderminster',    away: 'Maidenhead',       date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Fylde',            away: 'Spennymoor',       date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Torquay',          away: 'Bath City',        date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Yeovil Town',      away: 'Slough Town',      date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Boston United',    away: 'Chorley',          date: '2026-08-16T14:00:00Z', format: 'three_way' },
+    { home: 'Blyth Spartans',   away: 'Hereford',         date: '2026-08-16T14:00:00Z', format: 'three_way' },
   ],
     // Matchweek 1 — mid-Sep 2026 (dates TBC)
     { home: 'Real Madrid',   away: 'Bayern Munich',   date: '2026-09-16T20:00:00Z', format: 'three_way' },

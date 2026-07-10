@@ -134,39 +134,69 @@ export const PGA_ROUNDS     = ["The Masters","PGA Championship","The Open","US O
 // ── Competitions ──────────────────────────────────────────────────────────────
 // active: true = visible in UI. Set false to hide without deleting.
 
-// ── English Football League team pools ────────────────────────────────────────
+// ── English Football League team pools — full 24-team representative matchups ──
 export const TEAM_POOL_CHAMPIONSHIP = [
-  ["West Ham",       "Wolves",          [0.48, 0.26, 0.26]],
-  ["Burnley",        "Sheffield United", [0.45, 0.28, 0.27]],
-  ["Southampton",    "Middlesbrough",    [0.50, 0.26, 0.24]],
-  ["Wrexham",        "Norwich City",     [0.44, 0.27, 0.29]],
-  ["Derby County",   "Watford",          [0.46, 0.27, 0.27]],
-  ["Blackburn",      "Swansea City",     [0.48, 0.27, 0.25]],
-  ["Millwall",       "Cardiff City",     [0.47, 0.27, 0.26]],
-  ["Preston",        "Bristol City",     [0.46, 0.27, 0.27]],
-  ["Luton Town",     "QPR",              [0.49, 0.26, 0.25]],
-  ["Bolton",         "Lincoln City",     [0.50, 0.26, 0.24]],
+  // 12 GW1-style matchups covering all 24 Championship teams 2026-27
+  ["Wolves",          "Blackburn",        [0.52, 0.26, 0.22]],
+  ["Burnley",         "West Ham",         [0.44, 0.27, 0.29]],
+  ["Southampton",     "Derby County",     [0.52, 0.26, 0.22]],
+  ["Middlesbrough",   "Norwich City",     [0.49, 0.27, 0.24]],
+  ["Sheffield United","Watford",          [0.48, 0.27, 0.25]],
+  ["Millwall",        "Stoke City",       [0.47, 0.27, 0.26]],
+  ["Cardiff City",    "Bristol City",     [0.46, 0.27, 0.27]],
+  ["Preston",         "West Brom",        [0.44, 0.27, 0.29]],
+  ["Wrexham",         "QPR",              [0.50, 0.26, 0.24]],
+  ["Bolton",          "Birmingham City",  [0.48, 0.27, 0.25]],
+  ["Lincoln City",    "Swansea City",     [0.44, 0.27, 0.29]],
+  ["Portsmouth",      "Charlton Athletic",[0.48, 0.27, 0.25]],
 ];
 export const TEAM_POOL_LEAGUE_ONE = [
-  ["Leicester City", "Oxford United",    [0.55, 0.25, 0.20]],
-  ["Stockport",      "Huddersfield",     [0.47, 0.27, 0.26]],
-  ["Barnsley",       "Wigan Athletic",   [0.46, 0.28, 0.26]],
-  ["Wycombe",        "Mansfield",        [0.45, 0.28, 0.27]],
-  ["Charlton",       "Peterborough",     [0.46, 0.28, 0.26]],
-  ["Exeter City",    "Cambridge Utd",    [0.48, 0.27, 0.25]],
+  // 12 GW1-style matchups covering all 24 League One teams 2026-27
+  // Relegated: Leicester City, Luton Town, Oxford United
+  // Promoted: Bromley, MK Dons, Cambridge United, Notts County
+  ["Leicester City",  "Stockport County", [0.58, 0.24, 0.18]],
+  ["Oxford United",   "Huddersfield",     [0.49, 0.27, 0.24]],
+  ["Barnsley",        "Sheffield Wednesday",[0.47, 0.27, 0.26]],
+  ["Wigan Athletic",  "Peterborough",     [0.47, 0.27, 0.26]],
+  ["Charlton Athletic","Leyton Orient",   [0.48, 0.27, 0.25]],
+  ["Exeter City",     "Mansfield Town",   [0.47, 0.27, 0.26]],
+  ["Reading",         "Plymouth Argyle",  [0.46, 0.28, 0.26]],
+  ["Cambridge United","Burton Albion",    [0.49, 0.27, 0.24]],
+  ["Luton Town",      "Wycombe",          [0.55, 0.25, 0.20]],
+  ["Notts County",    "MK Dons",          [0.48, 0.27, 0.25]],
+  ["Bromley",         "Bristol Rovers",   [0.47, 0.27, 0.26]],
+  ["Stevenage",       "Blackpool",        [0.46, 0.28, 0.26]],
 ];
 export const TEAM_POOL_LEAGUE_TWO = [
-  ["Notts County",   "Bromley",          [0.50, 0.27, 0.23]],
-  ["AFC Wimbledon",  "Swindon Town",     [0.46, 0.28, 0.26]],
-  ["Colchester",     "Grimsby",          [0.47, 0.28, 0.25]],
-  ["Doncaster",      "Newport County",   [0.49, 0.27, 0.24]],
-  ["Crawley Town",   "Gillingham",       [0.46, 0.28, 0.26]],
+  // 12 GW1-style matchups covering all 24 League Two teams 2026-27
+  // York City, Rochdale, Boreham Wood promoted from National League
+  ["AFC Wimbledon",   "Swindon Town",     [0.47, 0.27, 0.26]],
+  ["Doncaster",       "Grimsby Town",     [0.48, 0.27, 0.25]],
+  ["Colchester",      "Newport County",   [0.47, 0.27, 0.26]],
+  ["Gillingham",      "Salford City",     [0.46, 0.28, 0.26]],
+  ["Bradford City",   "Chesterfield",     [0.45, 0.28, 0.27]],
+  ["York City",       "Carlisle United",  [0.50, 0.27, 0.23]],
+  ["Rochdale",        "Morecambe",        [0.49, 0.27, 0.24]],
+  ["Tranmere",        "Barrow",           [0.47, 0.27, 0.26]],
+  ["Harrogate",       "Sutton United",    [0.46, 0.28, 0.26]],
+  ["Crawley Town",    "Forest Green",     [0.48, 0.27, 0.25]],
+  ["Accrington",      "Boreham Wood",     [0.45, 0.28, 0.27]],
+  ["Ebbsfleet",       "Dag & Red",        [0.44, 0.28, 0.28]],
 ];
 export const TEAM_POOL_NATIONAL_LEAGUE = [
-  ["York City",      "Rochdale",         [0.50, 0.26, 0.24]],
-  ["Halifax Town",   "Ebbsfleet",        [0.48, 0.27, 0.25]],
-  ["Dag & Red",      "Maidstone",        [0.47, 0.28, 0.25]],
-  ["Solihull Moors", "Altrincham",       [0.46, 0.28, 0.26]],
+  // 12 GW1-style matchups covering all 24 National League teams 2026-27
+  ["Halifax Town",    "Maidstone",        [0.49, 0.27, 0.24]],
+  ["Altrincham",      "Solihull Moors",   [0.47, 0.28, 0.25]],
+  ["Hartlepool",      "Southend United",  [0.46, 0.28, 0.26]],
+  ["Wealdstone",      "Dover Athletic",   [0.47, 0.28, 0.25]],
+  ["Gateshead",       "Eastleigh",        [0.48, 0.27, 0.25]],
+  ["FC Halifax",      "Woking",           [0.49, 0.27, 0.24]],
+  ["Kidderminster",   "Maidenhead",       [0.46, 0.28, 0.26]],
+  ["Fylde",           "Spennymoor",       [0.47, 0.27, 0.26]],
+  ["Torquay",         "Bath City",        [0.45, 0.28, 0.27]],
+  ["Yeovil Town",     "Slough Town",      [0.48, 0.27, 0.25]],
+  ["Boston United",   "Chorley",          [0.47, 0.28, 0.25]],
+  ["Blyth Spartans",  "Hereford",         [0.46, 0.28, 0.26]],
 ];
 
 export const COMPETITIONS = [
