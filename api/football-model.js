@@ -165,15 +165,17 @@ export default async function handler(req, res) {
   const cutoff = new Date(now.getTime() + 21 * 24 * 60 * 60 * 1000)
   const ratings = competitionKey === 'epl' ? EPL_RATINGS : competitionKey === 'laliga' ? LALIGA_RATINGS : UCL_RATINGS
 
-  const upcoming = schedule
-    .filter(f => { const d = new Date(f.date); return d > now && d <= cutoff })
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
+  const allFuture = schedule.filter(f => new Date(f.date) > now).sort((a,b) => new Date(a.date) - new Date(b.date))
+  const upcoming = allFuture.filter(f => new Date(f.date) <= cutoff)
+  const nextFixtureDate = allFuture[0]?.date || null
+  const nextFixtureName = allFuture[0] ? `${allFuture[0].home} vs ${allFuture[0].away}` : null
 
   if (!upcoming.length) {
     return res.status(200).json({
       fixtures: [],
+      nextFixture: nextFixtureDate,
+      nextFixtureName,
       debug: 'No upcoming fixtures in next 21 days',
-      nextFixture: schedule.find(f => new Date(f.date) > now)?.date || 'none',
     })
   }
 

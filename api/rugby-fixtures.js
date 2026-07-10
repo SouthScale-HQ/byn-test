@@ -338,20 +338,17 @@ export default async function handler(req, res) {
     const scheduleFixtures = compConfig.fixtures
 
     // Filter to upcoming fixtures within the next 21 days
-    const upcoming = scheduleFixtures
-      .filter(f => {
-        const d = new Date(f.date)
-        return d > now && d <= cutoff
-      })
-      .sort((a, b) => new Date(a.date) - new Date(b.date))
+    const allFuture = scheduleFixtures.filter(f => new Date(f.date) > now).sort((a,b) => new Date(a.date) - new Date(b.date))
+    const upcoming = allFuture.filter(f => new Date(f.date) <= cutoff)
+    const nextFromFullSchedule = allFuture[0]
+    const nextFixtureName = nextFromFullSchedule ? `${nextFromFullSchedule.home} vs ${nextFromFullSchedule.away}` : null
 
     if (!upcoming.length) {
-      const next = scheduleFixtures.find(f => new Date(f.date) > now)
       return res.status(200).json({
         fixtures: [],
         debug: 'No fixtures in the next 21 days',
-        nextFixture: next?.date || null,
-        nextMatch: next ? `${next.home} vs ${next.away}` : null,
+        nextFixture: nextFromFullSchedule?.date || null,
+        nextFixtureName,
       })
     }
 
