@@ -43,12 +43,20 @@ const LALIGA_RATINGS = {
   'Girona':          76, 'Valladolid':     60,
 }
 
-// ── Champions League strength ratings ─────────────────────────────────────────
+// ── Champions League strength ratings (36-team league phase) ─────────────────
 const UCL_RATINGS = {
-  'Real Madrid':     97, 'Man City':       96, 'Bayern Munich':   95,
-  'PSG':             92, 'Inter Milan':    91, 'Barcelona':       90,
-  'Arsenal':         88, 'Liverpool':      87, 'Atletico Madrid': 85,
-  'Borussia Dortmund': 83, 'Chelsea':      82, 'Juventus':        81,
+  'Real Madrid':        97, 'Bayern Munich':       95, 'Arsenal':             88,
+  'Liverpool':          87, 'Barcelona':           90, 'Chelsea':             82,
+  'Inter Milan':        91, 'Atletico Madrid':     85, 'PSG':                 89,
+  'Juventus':           81, 'Borussia Dortmund':   83, 'Napoli':              80,
+  'Porto':              78, 'Newcastle United':    84, 'Ajax':                76,
+  'RB Leipzig':         82, 'Bayer Leverkusen':    86, 'AC Milan':            84,
+  'Benfica':            77, 'Feyenoord':           76, 'PSV':                 75,
+  'Monaco':             74, 'Sporting CP':         75, 'Celtic':              72,
+  'Club Brugge':        71, 'Shakhtar':            70, 'Galatasaray':         72,
+  'Aston Villa':        83, 'Red Star Belgrade':   68, 'Anderlecht':          67,
+  'Dinamo Zagreb':      66, 'Sheriff Tiraspol':    62, 'RB Salzburg':         73,
+  'Sturm Graz':         65, 'Slavia Prague':       67, 'Young Boys':          64,
 }
 
 // ── International H2H records (home wins out of last 5) ───────────────────────
@@ -268,14 +276,28 @@ const FIXTURES = {
     { home: 'Boston United',    away: 'Chorley',          date: '2026-08-16T14:00:00Z', format: 'three_way' },
     { home: 'Blyth Spartans',   away: 'Hereford',         date: '2026-08-16T14:00:00Z', format: 'three_way' },
   ],
-  // Champions League — Matchweek 1 mid-Sep 2026 (dates TBC)
+  // Champions League — Matchday 1, Sep 16-17 2026 (36-team league phase, 18 fixtures)
   ucl: [
-    { home: 'Real Madrid',   away: 'Bayern Munich',   date: '2026-09-16T20:00:00Z', format: 'three_way' },
-    { home: 'Man City',      away: 'PSG',             date: '2026-09-16T20:00:00Z', format: 'three_way' },
-    { home: 'Arsenal',       away: 'Inter Milan',     date: '2026-09-17T20:00:00Z', format: 'three_way' },
-    { home: 'Barcelona',     away: 'Juventus',        date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'Real Madrid',       away: 'Bayern Munich',      date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'Arsenal',           away: 'Inter Milan',        date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'Liverpool',         away: 'Atletico Madrid',    date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'Chelsea',           away: 'Borussia Dortmund',  date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'Barcelona',         away: 'Napoli',             date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'Juventus',          away: 'Porto',              date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'PSG',               away: 'Newcastle United',   date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'RB Leipzig',        away: 'Ajax',               date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'AC Milan',          away: 'Celtic',             date: '2026-09-16T20:00:00Z', format: 'three_way' },
+    { home: 'Bayer Leverkusen',  away: 'Benfica',            date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'Feyenoord',         away: 'PSV',                date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'Monaco',            away: 'Sporting CP',        date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'Club Brugge',       away: 'Shakhtar',           date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'Galatasaray',       away: 'Aston Villa',        date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'Red Star Belgrade', away: 'Anderlecht',         date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'Dinamo Zagreb',     away: 'Sheriff Tiraspol',   date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'RB Salzburg',       away: 'Sturm Graz',         date: '2026-09-17T20:00:00Z', format: 'three_way' },
+    { home: 'Slavia Prague',     away: 'Young Boys',         date: '2026-09-17T20:00:00Z', format: 'three_way' },
   ],
-  // Euros — 2028, dates TBC
+  // Euros — 2028, placeholder
   euros: [
     { home: 'England',  away: 'Germany',  date: '2028-06-14T20:00:00Z', format: 'three_way' },
     { home: 'France',   away: 'Spain',    date: '2028-06-15T20:00:00Z', format: 'three_way' },
