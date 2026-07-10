@@ -154,3 +154,24 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 - [x] Simplified navigation — 3 competition buttons, pizza stack menu grouped by category
 - [x] Rankings and Leagues tabs with full details
 - [x] Landing page at bynapp.online with phone mockup, features, sports list
+
+---
+
+## 📅 Recent session — July 10-11, 2026
+
+### Completed ✅
+- [x] **Football competitions fixed** — resolved syntax error in `football-model.js` (missing `ucl:` key caused entire module to fail). All football competitions now returning correct fixture data.
+- [x] **90-day fixture window** — all model endpoints (football, rugby, NFL) now look 90 days ahead so upcoming seasons (EPL Aug 21, Championship Aug 14, UCL Sep 16) appear in both app and admin.
+- [x] **Champions League full fixtures** — expanded from 4 to 18 Matchday 1 fixtures (36-team league phase format). UCL ratings expanded to cover all 36 clubs.
+- [x] **English football pyramid** — Championship, League One, League Two, National League added with full 24-team squads, 12-match GW1 fixtures, and team strength ratings.
+- [x] **Competitions reduced to Football / Rugby / F1** — deactivated Tennis, Golf, NFL, NBA, IPL, MotoGP, NASCAR, FIFA WC 26, Euros, Rugby WC. 14 active competitions remain.
+- [x] **Menu and competition row filter** — only active competitions shown in pizza stack menu and top row buttons. Inactive competitions no longer visible to users.
+- [x] **Super Rugby renamed** — "Super Rugby" → "Super Rugby Pacific" in constants.js, Supabase, and admin fixtures.
+- [x] **Admin fixtures split into two sections** — Active on BYN (14) and Not currently active (10), each sorted by next fixture date.
+
+### To reactivate when ready
+- FIFA WC 26 — set `active: true` in `constants.js` and Supabase. Fixtures and model already built.
+- Tennis (Wimbledon) — set `active: true`. Model built with ATP/WTA rankings.
+- Golf (The Open) — set `active: true`. Model built with OWGR field.
+- NFL — set `active: true` (activate September 2026). Model built.
+- Euros — 2028 season. Set active when closer.
