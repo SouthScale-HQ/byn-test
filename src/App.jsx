@@ -380,6 +380,7 @@ export default function PlatformMock() {
   // { [compKey]: [{ name, outcomes, probabilities, kickoff, externalId }] }
   const [liveFixtures, setLiveFixtures] = useState({});
   const [fixturesLoading, setFixturesLoading] = useState(false);
+  const [noFixturesComps, setNoFixturesComps] = useState(new Set());
 
   // Seed cd.markets from live API odds at round start (before any bets)
   // After seeding, LMSR takes over — API is never consulted again mid-round
@@ -454,13 +455,15 @@ export default function PlatformMock() {
         return;
       }
 
-      // 2. Cache miss — call the API
+      // 2. Cache miss — call the model
       const fixtures = await fetchUpcomingFixtures(compKey, 14);
       if (fixtures.length > 0) {
         setLiveFixtures((prev) => ({ ...prev, [compKey]: fixtures }));
         seedMarketsFromLive(compKey, fixtures);
-        // 3. Save to cache so subsequent loads don't cost API credits
         await cacheFixtures(compKey, roundNum, fixtures);
+      } else {
+        // No fixtures available — mark so UI can show appropriate message
+        setNoFixturesComps((prev) => new Set([...prev, compKey]));
       }
     } catch (err) {
       console.error('Error loading live fixtures:', err);
@@ -833,6 +836,7 @@ export default function PlatformMock() {
     // Clear DB round state and fixture cache so new round gets fresh data
     setDbRoundState((prev) => { const n = { ...prev }; delete n[activeCompKey]; return n; });
     setLiveFixtures((prev) => { const n = { ...prev }; delete n[activeCompKey]; return n; });
+    setNoFixturesComps((prev) => { const n = new Set(prev); n.delete(activeCompKey); return n; });
     // Re-fetch live fixtures for the new round (force=true bypasses stale closure)
     setTimeout(() => loadLiveFixtures(activeCompKey, true), 300);
 
@@ -1091,14 +1095,23 @@ export default function PlatformMock() {
               {/* All competitions */}
               <div style={{ padding: "12px 16px 4px" }}>
                 <div style={{ fontSize: 10, fontWeight: 700, color: "#5E8775", letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 8 }}>Competitions</div>
-                {COMPETITIONS.filter((c) => c.active).map((c) => (
-                  <button key={c.key} onClick={() => { selectCompetition(c.key); setTab("markets"); setMenuOpen(false); }} className="sg"
-                    style={{ width: "100%", textAlign: "left", padding: "10px 12px", borderRadius: 8, border: "none", background: activeCompKey === c.key ? "#16352A" : "transparent", color: activeCompKey === c.key ? "#2FA86C" : "#D9E5DE", fontSize: 14, fontWeight: activeCompKey === c.key ? 700 : 400, marginBottom: 2, cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ fontSize: 18, width: 24, textAlign: "center" }}>{c.icon}</span>
-                    {c.name}
-                    {activeCompKey === c.key && <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#2FA86C", marginLeft: "auto" }} />}
-                  </button>
-                ))}
+              {/* All competitions grouped by category */}
+              {CATEGORIES.filter(cat => COMPETITIONS.some(c => c.category === cat.key)).map((cat) => {
+                const catComps = COMPETITIONS.filter(c => c.category === cat.key)
+                return (
+                  <div key={cat.key}>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "#3a5a4a", letterSpacing: 1.5, textTransform: "uppercase", padding: "12px 12px 4px", marginTop: 4 }}>{cat.name}</div>
+                    {catComps.map((c) => (
+                      <button key={c.key} onClick={() => { selectCompetition(c.key); setTab("markets"); setMenuOpen(false); }} className="sg"
+                        style={{ width: "100%", textAlign: "left", padding: "9px 12px", borderRadius: 8, border: "none", background: activeCompKey === c.key ? "#16352A" : "transparent", color: activeCompKey === c.key ? "#2FA86C" : "#D9E5DE", fontSize: 14, fontWeight: activeCompKey === c.key ? 700 : 400, marginBottom: 1, cursor: "pointer", display: "flex", alignItems: "center", gap: 10 }}>
+                        <span style={{ fontSize: 16, width: 24, textAlign: "center" }}>{c.icon}</span>
+                        {c.name}
+                        {activeCompKey === c.key && <div style={{ width: 6, height: 6, borderRadius: "50%", background: "#2FA86C", marginLeft: "auto" }} />}
+                      </button>
+                    ))}
+                  </div>
+                )
+              })}
               </div>
 
               {/* Navigation */}
@@ -1129,16 +1142,17 @@ export default function PlatformMock() {
           </div>
         )}
 
-        {/* Single-tier competition buttons — only shown on Games tab */}
+        {/* Single-tier competition buttons — user's active comps first, then rest by category */}
         {tab === "markets" && (() => {
-          const activeComps = COMPETITIONS.filter((c) => c.active);
+          const catOrder = CATEGORIES.map(c => c.key)
+          const allComps = COMPETITIONS.slice().sort((a, b) => catOrder.indexOf(a.category) - catOrder.indexOf(b.category))
           // User is "active" in a comp if they have bets or non-zero balance
-          const userActive = activeComps.filter((c) => {
+          const userActive = allComps.filter((c) => {
             const d = compData[c.key];
             return d && (d.bets.length > 0 || d.balance > 0);
           });
           const userActiveKeys = new Set(userActive.map((c) => c.key));
-          const rest = activeComps.filter((c) => !userActiveKeys.has(c.key));
+          const rest = allComps.filter((c) => !userActiveKeys.has(c.key));
           const ordered = [...userActive, ...rest];
           const pinned = ordered.slice(0, 3);
           return (
@@ -1154,8 +1168,7 @@ export default function PlatformMock() {
                   <span style={{ fontSize: 14 }}>{c.icon}</span>{c.name}
                 </button>
               ))}
-              {ordered.length > 3 && (
-                <button onClick={() => setMenuOpen(true)} className="sg"
+              {ordered.length > 3 && (                <button onClick={() => setMenuOpen(true)} className="sg"
                   style={{ padding: "7px 13px", borderRadius: 8, fontSize: 12, fontWeight: 600, whiteSpace: "nowrap", flexShrink: 0, cursor: "pointer",
                     border: `1px solid ${!pinned.find(c => c.key === activeCompKey) ? "#2FA86C" : "#16352A"}`,
                     background: !pinned.find(c => c.key === activeCompKey) ? "#16352A" : "#0F2920",
@@ -1304,17 +1317,27 @@ export default function PlatformMock() {
                   <>
                     {fixturesLoading && (
                       <div style={{ display: "flex", gap: 8, padding: "8px 10px", borderRadius: 8, background: "#16352A", marginBottom: 8, fontSize: 11, color: "#7FBFA0" }}>
-                        <span>⏳</span><span>Loading live fixtures...</span>
+                        <span>⏳</span><span>Loading fixtures...</span>
                       </div>
                     )}
                     {!fixturesLoading && cd.liveSeeded && (
                       <div style={{ display: "flex", gap: 8, padding: "8px 10px", borderRadius: 8, background: "#0D2B1A", border: "1px solid #2f6b4d", marginBottom: 8, fontSize: 11, color: "#2FA86C" }}>
-                        <span>🟢</span><span>Live fixtures — opening odds seeded from bookmaker data, now driven by your bets</span>
+                        <span>🟢</span><span>Live fixtures — odds generated from our probability model, driven by your bets</span>
                       </div>
                     )}
-                    {!fixturesLoading && !cd.liveSeeded && (
+                    {!fixturesLoading && !cd.liveSeeded && noFixturesComps.has(activeCompKey) && (
+                      <div style={{ ...card, textAlign: "center", padding: "28px 16px", marginBottom: 12 }}>
+                        <div style={{ fontSize: 28, marginBottom: 10 }}>{comp.icon}</div>
+                        <div className="sg" style={{ fontWeight: 700, fontSize: 15, marginBottom: 8, color: "#F4F7F2" }}>{comp.name}</div>
+                        <div style={{ fontSize: 13, color: "#9DBFAF", marginBottom: 6 }}>No fixtures available right now.</div>
+                        <div style={{ fontSize: 12, color: "#5E8775" }}>
+                          Check back closer to the season start, or browse another competition in the menu.
+                        </div>
+                      </div>
+                    )}
+                    {!fixturesLoading && !cd.liveSeeded && !noFixturesComps.has(activeCompKey) && (
                       <div style={{ display: "flex", gap: 8, padding: "8px 10px", borderRadius: 8, background: "#16352A", marginBottom: 8, fontSize: 11, color: "#9DBFAF" }}>
-                        <span>📋</span><span>Demo fixtures — no upcoming matches found in the next 14 days</span>
+                        <span>📋</span><span>Demo fixtures — loading real fixtures...</span>
                       </div>
                     )}
                     <div style={{ display: "flex", gap: 8, padding: 10, borderRadius: 8, background: "#16352A", marginBottom: 12, fontSize: 11, color: "#7FBFA0" }}>
