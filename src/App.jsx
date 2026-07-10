@@ -248,16 +248,9 @@ export default function PlatformMock() {
     return () => subscription.unsubscribe();
   }, []);
 
-  // Load live fixtures for active competitions on mount
+  // Load live fixtures for all active competitions on mount
   useEffect(() => {
-    loadLiveFixtures("epl");
-    loadLiveFixtures("fifa_wc");
-    
-    
-    loadLiveFixtures("pga");
-    loadLiveFixtures("f1");
-    loadLiveFixtures("tennis");
-    loadLiveFixtures("nations_champ");
+    COMPETITIONS.filter(c => c.active).forEach(c => loadLiveFixtures(c.key));
   }, []);
 
   async function signInWithGoogle() {

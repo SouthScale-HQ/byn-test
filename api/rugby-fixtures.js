@@ -161,7 +161,27 @@ function calcFixtureProbability(home, away, rankings, neutral = false) {
 }
 
 // ── Main handler ──────────────────────────────────────────────────────────────
-export default async function handler(req, res) {
+// ── Rugby Championship 2026 fixture schedule ──────────────────────────────────
+const RUGBY_CHAMP_FIXTURES = [
+  // Part of Nations Championship window, Aug-Sep 2026
+  { home: 'South Africa', away: 'Argentina',   date: '2026-08-08T14:00:00Z', neutral: false },
+  { home: 'New Zealand',  away: 'Australia',   date: '2026-08-08T07:05:00Z', neutral: false },
+  { home: 'Argentina',    away: 'South Africa',date: '2026-08-15T17:10:00Z', neutral: false },
+  { home: 'Australia',    away: 'New Zealand', date: '2026-08-15T10:05:00Z', neutral: false },
+  { home: 'South Africa', away: 'New Zealand', date: '2026-08-29T14:00:00Z', neutral: false },
+  { home: 'Australia',    away: 'Argentina',   date: '2026-08-29T10:05:00Z', neutral: false },
+  { home: 'New Zealand',  away: 'South Africa',date: '2026-09-05T07:05:00Z', neutral: false },
+  { home: 'Argentina',    away: 'Australia',   date: '2026-09-05T17:10:00Z', neutral: false },
+  { home: 'South Africa', away: 'Australia',   date: '2026-09-19T14:00:00Z', neutral: false },
+  { home: 'New Zealand',  away: 'Argentina',   date: '2026-09-19T07:05:00Z', neutral: false },
+  { home: 'Australia',    away: 'South Africa',date: '2026-09-26T10:05:00Z', neutral: false },
+  { home: 'Argentina',    away: 'New Zealand', date: '2026-09-26T17:10:00Z', neutral: false },
+]
+
+const SCHEDULE_MAP = {
+  nations_champ: NATIONS_CHAMP_FIXTURES,
+  rugby_champ:   RUGBY_CHAMP_FIXTURES,
+}
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' })
 
   const { competitionKey } = req.query
@@ -174,14 +194,11 @@ export default async function handler(req, res) {
     // Fetch World Rugby rankings (free, no key)
     const rankings = await fetchWorldRugbyRankings()
 
-    let scheduleFixtures = []
-
-    if (competitionKey === 'nations_champ') {
-      scheduleFixtures = NATIONS_CHAMP_FIXTURES
-    } else {
+    const scheduleFixtures = SCHEDULE_MAP[competitionKey]
+    if (!scheduleFixtures) {
       return res.status(200).json({
         fixtures: [],
-        debug: `No fixture schedule for: ${competitionKey} — add to LEAGUE_FIXTURES map`,
+        debug: `No fixture schedule for: ${competitionKey}`,
       })
     }
 
