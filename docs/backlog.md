@@ -4,6 +4,40 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 
 ---
 
+## 🚀 Path to launch (sequenced)
+
+Rough dependency order for getting to a credible Google Play submission. Each phase unblocks the next — items within a phase can happen in parallel.
+
+**Phase 1 — Make multiplayer real** (nothing after this matters if this isn't true)
+1. **Auto-settlement job** (Backend) — single server-side result per round instead of per-browser `Math.random()`. This is the foundation everything else in this list sits on.
+2. **Persist leagues to Supabase** (Backend) — `groups`/`group_members` tables, replacing React state.
+3. **Add `profiles.country`** (Backend) — small, but needed alongside #2 for real leaderboard filtering.
+4. **Real bot management** (Backend) — remove/replace bot simulation now that real cross-user standings exist.
+5. **Ad network integration** (Features → moved up) — wire real AdMob/Google Ad Manager now, not post-launch. The ad-boost button already exists in the UI promising "watch an ad, get 50 nuts" but isn't connected to a real network yet — that's a promise the app isn't keeping. More importantly, ad-boost is the primary revenue mechanism per the schema notes, not a bolt-on feature; launching without it and adding it in later reads to users as a bait-and-switch ("used to be ad-free, now it's not") rather than "how the app has always worked." Ship it as part of the core experience from day one.
+
+**Phase 2 — Trust & compliance**
+6. **Age gating** — replace self-declared checkbox with captured DOB + server-side age check (17+, per schema notes on Apple's simulated-gambling rating; Google Play IARC will land similarly).
+7. **Incorporate SouthScale** (Companies House, £50) — unblocks business-owned accounts and a real entity behind the store listing.
+8. **ICO registration** (£40/year).
+9. **Transfer Supabase to SouthScale business account.**
+
+**Phase 3 — Store-readiness cleanup**
+10. **Remove demo simulator buttons** ("Advance to lockout", "Simulate results").
+11. **Set real season lengths** — replace `SEASON_LENGTH_DEMO = 4`.
+12. **Reminder cron job** — finish this now that scheduled jobs infra exists from Phase 1.
+13. **Server-side ad verification** (Backend — firmed up, no longer optional) — verify ad completion via ad network callback before crediting nuts. Given ads are now a Phase 1 launch item rather than deferred, this is required, not "if ads ship at launch."
+
+**Phase 4 — Store submission**
+14. Apple Sign In only matters if targeting iOS App Store — **not required for Google Play**, so it can move after launch if Play is the near-term target.
+15. Google Play listing, store assets, IARC content questionnaire.
+
+**Explicitly deferred, not blockers:**
+- Stripe / league slot purchases — monetization can follow initial launch.
+- Push notifications, in-play market updates, position selling, stats page — feature work, not launch blockers.
+- Per-league ranking in settlement email — depends on Phase 1 items #1–3, naturally falls out once those land, no separate push needed.
+
+---
+
 ## 🟣 User account management
 
 - [x] **Delete Account button** — added to Profile tab with 60-day cooling-off period, confirmation email, and cancel option.
@@ -44,7 +78,7 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 - [ ] **Add `profiles.country`** — country is currently local/client state only, not a DB column. Needed for real "country" leaderboard filtering server-side (currently done by filtering an in-memory array that includes simulated bots).
 - [ ] **Real bot management** — remove bot simulation from App.jsx before go-live
 - [ ] **Transfer Supabase** to SouthScale business account once incorporated
-- [ ] **Server-side ad verification** — verify ad completion via ad network callback before crediting nuts
+- [ ] **Server-side ad verification** — verify ad completion via ad network callback before crediting nuts. **Required for launch, not optional** — see Path to launch Phase 3.
 - [ ] **Push notifications** — lockout reminders, settlement alerts (defer to native app)
 - [ ] **Reminder cron job** — `reminders` table stores user reminders with `reminder_date` and `sent: false`. Need scheduled job to send email 7 days before fixture and mark `sent: true`. Options: Vercel Cron (Pro plan), GitHub Actions schedule, or Supabase pg_cron.
 - [ ] **Set real season lengths** — EPL = 38, La Liga = 38, NFL = 17, replace `SEASON_LENGTH_DEMO = 4`
@@ -54,7 +88,7 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 
 ## 🟡 Features
 
-- [ ] **Ad network integration** — wire up Google AdMob (mobile) or Google Ad Manager (web) for nuts boost ad views
+- [ ] **Ad network integration** — wire up Google AdMob (mobile) or Google Ad Manager (web) for nuts boost ad views. **Now sequenced as Phase 1 of Path to launch, not deferred** — see top of doc.
 - [ ] **Company-sponsored leagues** — businesses pay to create branded leagues
 - [ ] **In-play market updates** — update prices during live events (websocket or polling)
 - [ ] **Outright winner markets** — season-long competition winner alongside weekly round markets
@@ -87,6 +121,8 @@ A running list of tasks, ideas, and improvements. Items are grouped by category 
 
 - [ ] **Slow initial load** — bundle is 125KB gzipped. Vercel edge cache added. Further options: replace lucide-react with inline SVGs, or replace Supabase JS client with direct fetch.
 - [x] **Round nuts to whole numbers** — `Math.round()` applied throughout display layer.
+- [x] **Show odds at bet placement** — `BetList` now displays the probability (%) and payout multiplier (x) captured at bet time (`priceAtExecution`), alongside stake, so users can see how odds have moved if they consider betting the same outcome again later. Data was already being captured and persisted (`price_at_execution` in `bets` table) — this was a display-only gap.
+- [ ] **Bets not reloaded from DB on refresh** — found while adding odds-at-placement above. `cd.bets` is only populated on the client at the moment a bet is placed; there's no code path that re-fetches a user's existing bets from Supabase on page load/refresh mid-round. A refresh during the betting window silently empties the visible bet list (DB rows and committed stake still persist correctly, so this looks display-only — worth confirming against `betService.js` before fixing).
 - [ ] **Kickoff time display** — working for F1 and all models. Needs verification once more competitions have live fixtures.
 - [ ] **Bet history tab** — view all past bets within a competition, not just current round
 - [ ] **Onboarding tour** — guided first-time user experience on first login
