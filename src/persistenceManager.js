@@ -112,13 +112,25 @@ export async function initRoundMarketsInDB(compKey, roundNum, seasonNum, markets
   for (let mi = 0; mi < markets.length; mi++) {
     const market = markets[mi]
 
+    // FIX (settlement job dependency): market.externalId for F1 is
+    // "f1-{sessionKey}" (set in oddsService.js's fetchF1Fixtures). Parsed
+    // out here and stored so the settlement job can fetch that race's
+    // results directly. Null for non-F1 markets, which don't set externalId
+    // in this format (football uses per-fixture externalId differently, or
+    // none at all currently — see football-data-team-ids.js for how football
+    // matches instead).
+    const externalSessionKey = (market.externalId && market.externalId.startsWith('f1-'))
+      ? parseInt(market.externalId.replace('f1-', ''), 10)
+      : null
+
     const { data: mRow, error: mErr } = await supabase
       .from('markets')
       .insert({
-        round_id:    round.id,
-        market_type: 'winner',
-        liquidity_b: market.b,
-        status:      'open',
+        round_id:              round.id,
+        market_type:           'winner',
+        liquidity_b:           market.b,
+        status:                'open',
+        external_session_key:  externalSessionKey,
       })
       .select()
       .single()
