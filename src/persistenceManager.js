@@ -76,6 +76,13 @@ export async function loadUserState(userId, competitions) {
 }
 
 // ── Initialise round + markets in DB (called lazily on first bet) ─────────────
+// FIX (settlement job dependency): markets[i].outcomeRefs, if present, is a
+// parallel array to markets[i].outcomes giving each outcome a stable external
+// ID (e.g. OpenF1 driver_number for F1) instead of relying on the display
+// label string. Stored as market_outcomes.external_ref. Requires the
+// migration: ALTER TABLE market_outcomes ADD COLUMN external_ref integer;
+// Competitions without outcomeRefs (e.g. football, which matches on team ID
+// via a separate lookup table instead) simply leave this column null.
 export async function initRoundMarketsInDB(compKey, roundNum, seasonNum, markets) {
   const round = await getOrCreateRound(compKey, roundNum, seasonNum)
   if (!round) return { roundId: null, dbOutcomeMap: {} }
@@ -119,10 +126,11 @@ export async function initRoundMarketsInDB(compKey, roundNum, seasonNum, markets
     if (mErr || !mRow) continue
 
     const outcomeRows = market.outcomes.map((label, oi) => ({
-      market_id:  mRow.id,
+      market_id:    mRow.id,
       label,
-      q:          market.q[oi],
-      sort_order: oi,
+      q:            market.q[oi],
+      sort_order:   oi,
+      external_ref: market.outcomeRefs?.[oi] ?? null,
     }))
 
     const { data: oRows } = await supabase

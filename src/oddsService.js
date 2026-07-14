@@ -42,6 +42,14 @@ async function fetchF1Fixtures() {
         format: 'outright',
         outcomes: data.drivers.map(d => `${d.fullName} · ${d.team}`),
         probabilities: data.drivers.map(d => d.probability),
+        // FIX (settlement job dependency): driverNumbers is parallel to
+        // outcomes/probabilities, giving each outcome a stable numeric ID
+        // (OpenF1's driver_number) instead of only a display-string label.
+        // Flows through to liveFixturesToMarkets() in App.jsx as
+        // market.outcomeRefs, then into market_outcomes.external_ref at
+        // creation time. Without this, the auto-settlement job has no
+        // reliable way to match a race winner back to a BYN outcome.
+        driverNumbers: data.drivers.map(d => d.number),
         driverDetails: data.drivers,
       }],
       nextFixtureDate: data.race.date,

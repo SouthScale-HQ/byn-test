@@ -102,6 +102,11 @@ function liveFixturesToMarkets(fixtures, comp) {
       b: comp.baseLiquidity,
       kickoff: f.kickoff,
       externalId: f.externalId,
+      // outcomeRefs is parallel to `outcomes` — for F1 this is OpenF1's
+      // driver_number per driver, giving each outcome a stable numeric ID
+      // for the settlement job to match against, instead of only a display
+      // string. Undefined/absent for competitions that don't have one yet.
+      outcomeRefs: f.driverNumbers,
     }];
   }
 

@@ -205,10 +205,17 @@ export default async function handler(req, res) {
     combined = normalise(combined)
 
     // ── Step 8: Build response ────────────────────────────────────────────────
+    // FIX (settlement job dependency): `number` (driver_number) is now
+    // included on each driver so it can flow through oddsService.js →
+    // App.jsx's market seeding → market_outcomes.external_ref, giving the
+    // auto-settlement job a stable ID to match a race winner against instead
+    // of guessing from the display-string label. See settle-rounds Edge
+    // Function's KNOWN GAPS note for why this was needed.
     const drivers = DRIVER_ROSTER.map(d => ({
       name: d.abbr,
       fullName: d.name,
       team: d.team,
+      number: d.number,
       probability: Math.round((combined[d.abbr] || 0) * 1000) / 1000,
       scores: {
         currentSeason: Math.round((currentScore[d.abbr] || 0) * 1000) / 1000,
